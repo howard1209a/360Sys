@@ -1,0 +1,31 @@
+{
+	"baseUrl": "https://10.29.160.99/data/",
+	"face": 6,
+	"row": 1,
+	"col": 1,
+	"duration": 1,
+    "tiles": [
+		[[{"src": "face0/face0.mpd", "width": "480", "height": "480", "x": 720, "y": 0, "z": 0, "rx": 0, "ry": 270, "rz": 0}]],
+		[[{"src": "face1/face1.mpd", "width": "480", "height": "480", "x": -720, "y": 0, "z": 0, "rx": 0, "ry": 90, "rz": 0}]],
+		[[{"src": "face2/face2.mpd", "width": "480", "height": "480", "x": 0, "y": 720, "z": 0, "rx": 90, "ry": 0, "rz": 180}]],
+		[[{"src": "face3/face3.mpd", "width": "480", "height": "480", "x": 0, "y": -720, "z": 0, "rx": -90, "ry": 0, "rz": 180}]],
+		[[{"src": "face4/face4.mpd", "width": "480", "height": "480", "x": 0, "y": 0, "z": -720, "rx": 0, "ry": 0, "rz": 0}]],
+		[[{"src": "face5/face5.mpd", "width": "480", "height": "480", "x": 0, "y": 0, "z": 720, "rx": 0, "ry": 180, "rz": 0}]]
+	],
+	"audio": "",
+	"edits":
+		{
+		   "edit" : [
+		      {
+		         "frame" : 2080,
+		         "type": "gradual",
+		         "region_of_interest": [                                                                 
+		            {
+		            "rank": 1,
+		            "ROI_theta": 0.267
+		            }
+		         ]     
+		      }
+		   ]
+		}
+}
