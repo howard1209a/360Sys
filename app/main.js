@@ -66,7 +66,7 @@ app.controller("DashController", [
     $scope.selectedItem = {
       // 默认视频源
       type: "json",
-      value: "https://10.29.160.99/360eavp/default.json",
+      value: "https://10.29.160.99/360sys/default.json",
     };
     $scope.optionButton = "Show Options";
     $scope.selectedRule = "FOVEditRule";
@@ -445,7 +445,7 @@ app.controller("DashController", [
     // 任意播放器卡顿时触发，主动暂停全部播放器
     function buffer_empty_event(e) {
       $scope.buffer_empty_flag[e.info.count] = true;
-      $scope.pause_all();
+      // $scope.pause_all();
     }
 
     // 任意播放器卡顿后重新加载完成时触发，当全部播放器帧就绪时主动播放全部播放器

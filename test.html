@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dash Live Streaming Player</title>
+  </head>
+  <body>
+    <h1>Dash Live Streaming Player</h1>
+    <video id="videoPlayer" controls width="800">
+      Your browser does not support the video tag.
+    </video>
+
+    <script src="https://cdn.jsdelivr.net/npm/dashjs@latest/dist/dash.all.min.js"></script>
+    <script>
+      // 创建Dash.js播放器实例
+      var player = dashjs.MediaPlayer().create();
+
+      // 设置播放器的视频元素
+      var videoElement = document.getElementById("videoPlayer");
+      player.initialize(
+        videoElement,
+        "https://10.29.160.99/data/face0/face0.mpd",
+        true
+      ); // 替换为你的MPD地址
+    </script>
+  </body>
+</html>
