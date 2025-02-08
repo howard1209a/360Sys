@@ -363,10 +363,12 @@ function getSphereRotation(CvpXRadians, CvpXOpositeRadians, ROIXRadians) {
   }
 }
 
+// 0 1 映射 -180 180
 function convert_normalized_to_degree(cvp_norm) {
   return 360 * cvp_norm - 180;
 }
 
+// 0 1 映射 -pi pi
 function convert_normalized_to_radians(cvp_norm) {
   return 2 * Math.PI * cvp_norm - Math.PI;
 }
