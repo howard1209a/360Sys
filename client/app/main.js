@@ -66,7 +66,7 @@ app.controller("DashController", [
     $scope.selectedItem = {
       // 默认视频源
       type: "json",
-      value: "https://10.29.160.99/360sys/default.json",
+      value: "https://10.29.160.99/360sys/client/default.json",
     };
     $scope.optionButton = "Show Options";
     $scope.selectedRule = "FOVEditRule";
