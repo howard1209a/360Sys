@@ -31,9 +31,9 @@ mkdir -p "$OUTPUT"
 exec ffmpeg -hide_banner -loglevel debug \
   -i "$INPUT" \
   -vf "$VF" \
-  -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -b:v:0 2000k -maxrate:v:0 2500k -bufsize:v:0 3000k \
-  -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -b:v:1 5000k -maxrate:v:1 5500k -bufsize:v:1 6000k \
-  -map 0:v:0 -c:v:2 libx264 -profile:v:2 main -b:v:2 10000k -maxrate:v:2 10500k -bufsize:v:2 11000k \
+  -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -b:v:0 20k -maxrate:v:0 25k -bufsize:v:0 30k \
+  -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -b:v:1 50k -maxrate:v:1 55k -bufsize:v:1 60k \
+  -map 0:v:0 -c:v:2 libx264 -profile:v:2 main -b:v:2 100k -maxrate:v:2 105k -bufsize:v:2 110k \
   -f dash \
   -segment_time 2 \
   -segment_list "$OUTPUT/stream.m3u8" \

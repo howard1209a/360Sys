@@ -5,21 +5,6 @@
     <meta charset="utf-8" />
     <title>(^_^)~ VR PLAYER ~(^_^)</title>
 
-    <script>
-      //// TODO:
-      // 1. Total QoE / Viewer's QoE / Content-based QoE -- Xu Yutong/Feng Fangzheng (Almost)
-      // 2. Content-based ABR -- Feng Fangzheng (V1_OFFLINE)
-      // 3. Popularity-based ABR (MEC later) -- Li Jinxi (V1_OFFLINE)
-      // 3. Aframe assets on demands
-      // 4. Tiles sync -- Feng Fangzheng (DONE)
-      // 5. ERP to CMP optimization -- Li Jinxi
-      // 6. Rendering
-      // 7. Visual UI -- Gao Nianzhen (DONE)
-      // 8. QUIC/WebRTC -- Chen Jiaxi
-      // 9. MEC
-      // 10. Audio codec
-    </script>
-
     <style>
       body {
         background-color: #ececec;
@@ -226,120 +211,10 @@
                 8000000).toFixed(2) : (totalThroughput / 8000).toFixed(0)}}
                 {{totalThroughput >= 8000000 ? " MB/s" : " kB/s"}}
               </div>
-
-              <!-- 								<div class="text-success">
-									<label class="text-primary" data-toggle="tooltip" data-placement="top">Total QOE : </label> {{totalQOE.toFixed(2)}}
-								</div>
-								<div class="text-success">
-									<label class="text-primary" data-toggle="tooltip" data-placement="top">Viewer's QOE : </label> {{viewerQOE.toFixed(2)}}
-								</div>
-								<div class="text-success">
-									<label class="text-primary" data-toggle="tooltip" data-placement="top">Content-based QOE : </label> {{contentQOE.toFixed(2)}}
-								</div> -->
-              <!-- <div class="text-success"> -->
-              <!-- <input id="videoDroppedFramesCB" type="checkbox" -->
-              <!-- ng-model="chartState.video.droppedFPS.selected" -->
-              <!-- ng-change="enableChartByName('droppedFPS', 'video')"> -->
-              <!-- <label class="text-primary" for="videoDroppedFramesCB" data-toggle="tooltip" -->
-              <!-- data-placement="top" -->
-              <!-- title="The absolute count of frames dropped by the rendering pipeline since play commenced">Dropped -->
-              <!-- Frames :</label> {{videoDroppedFrames}} -->
-              <!-- </div> -->
             </div>
           </div>
         </div>
-        <!-- 				<div class="tabs-section" style="width:calc(100% - 1050px);float:left;margin-left:20px;margin-top: 10px">
-					<table class="table table-striped" style="border: 3px solid #136bfb;padding-left: 5px;padding-right: 5px;text-align: center;">
-						<thhead><tr>
-							<th style="text-align: center;">video_0</th>
-							<th style="text-align: center;">video_1</th>
-							<th style="text-align: center;">video_2</th>
-						</tr></thhead>
-						<tbody>
-						<tr>
-							<td><canvas id="capture_0" ng-style="mycanvas"></canvas></td>
-							<td><canvas id="capture_1" ng-style="mycanvas"></canvas></td>
-							<td><canvas id="capture_2" ng-style="mycanvas"></canvas></td>
-						</tr>
-
-						</tbody>
-						<thhead><tr>
-							<th style="text-align: center;">video_3</th>
-							<th style="text-align: center;">video_4</th>
-							<th style="text-align: center;">video_5</th>
-						</tr></thhead>
-						<tbody>
-						<tr>
-							<td><canvas id="capture_3" ng-style="mycanvas"></canvas></td>
-							<td><canvas id="capture_4" ng-style="mycanvas"></canvas></td>
-							<td><canvas id="capture_5" ng-style="mycanvas"></canvas></td>
-
-						</tr>
-						</tbody>
-					</table>
-				</div> -->
       </div>
-
-      <!-- 		<div class="row" style="background-color: #ffffff">
-				<div id="statstable" class="table-striped" style="margin: 15px;">
-
-					<table class="table table-striped" style="border: 3px solid #136bfb;padding-left: 5px;padding-right: 5px;text-align: center;">
-						<thead>
-						<tr>
-							<th style="text-align: center;">Player ID</th>
-							<th style="text-align: center;">Buffer Level</th>
-							<th style="text-align: center;">Average Throughput</th>
-							<th style="text-align: center;">Timeline</th>
-							<th style="text-align: center;">Quality</th>
-							<th style="text-align: center;">FOV Score</th>
-							<th style="text-align: center;">Content Score</th>
-							<th style="text-align: center;">Total loaded Time</th>
-							<th style="text-align: center;">Catchup State</th>
-						</tr>
-						</thead>
-						<tbody>
-						<tr ng-repeat="item in stats">
-							<td>{{item.playerid}}</td>
-							<td>{{item.bufferlevel}}</td>
-							<td>{{item.throughput}}</td>
-							<td>{{item.time}}</td>
-							<td>{{item.quality}}</td>
-							<td>{{item.fovscore}}</td>
-							<td>{{item.playerContentScore}}</td>
-							<td>{{item.totaltime}}</td>
-							<td>{{item.playerCatchUp}}</td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-			</div> -->
-
-      <!-- CHARTING -->
-      <!-- 			<div class="chart-panel">
-				<div class="chart-controls" style="height: 50px;">
-					<div class="btn-group">
-						<button id="disable-chart-btn" class="btn btn-primary" ng-click="clearchartData_quality()" ng-cloak>Clear
-						</button>
-					</div>
-					<div id="legend-wr.er" class="legend-row">
-					</div>
-
-				</div>
-				<div id="chart-wr.er">
-					<span style="text-align:center;display:block;">VIDEO_QUALITY</span>
-					<div class="chart-inventory">
-						<flot dataset="chartData_quality" options="chartOptions"></flot>
-					</div>
-					<span style="text-align:center;display:block;">VIDEO_BUFFER</span>
-					<div class="chart-inventory">
-						<flot dataset="chartData_buffer" options="chartOptions"></flot>
-					</div>
-					<span style="text-align:center;display:block;">VIDEO_THROUGHPUT</span>
-					<div class="chart-inventory">
-						<flot dataset="chartData_throughput" options="chartOptions"></flot>
-					</div>
-				</div>
-			</div> -->
     </div>
   </body>
 </html>
