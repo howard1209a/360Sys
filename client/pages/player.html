@@ -118,6 +118,7 @@
                       type="radio"
                       autocomplete="off"
                       ng-click="changeABRStrategy('FOVRule')"
+                      checked="checked"
                     />
                     FOVRule
                   </label>
@@ -144,7 +145,6 @@
                       id="FOVEditRule"
                       type="radio"
                       autocomplete="off"
-                      checked="checked"
                       ng-click="changeABRStrategy('FOVEditRule')"
                     />
                     FOVEditRule
@@ -211,7 +211,42 @@
                 8000000).toFixed(2) : (totalThroughput / 8000).toFixed(0)}}
                 {{totalThroughput >= 8000000 ? " MB/s" : " kB/s"}}
               </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                >
+                  CPU Usage:
+                </label>
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                >
+                  Energy Consumption:
+                </label>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="clientInfo">
+        <!-- 显示动态折线图的区域 -->
+        <div id="charts">
+          <div class="chart-container">
+            <canvas id="throughputChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="bitrateSelectChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="energyChart"></canvas>
           </div>
         </div>
       </div>

@@ -69,7 +69,7 @@ app.controller("DashController", [
       value: "https://10.29.160.99/360sys/client/default.json",
     };
     $scope.optionButton = "Show Options";
-    $scope.selectedRule = "FOVEditRule";
+    $scope.selectedRule = "FOVRule";
 
     $scope.requestDuration = 3000; // 计算吞吐量的区间长度
     $scope.IntervalOfComputetotalThroughput = 1000; // 计算吞吐量的时间间隔
@@ -772,6 +772,8 @@ app.controller("DashController", [
       // aframe每渲染一帧执行一次，更新输出csv文件
       requestAnimationFrame(updateOutputFile);
 
+      initChart();
+
       document.getElementById("Load").style = "display: none;";
       document.getElementById("Play").style = "display: inline;";
     };
@@ -855,8 +857,6 @@ app.controller("DashController", [
     }
 
     function computetotalThroughput() {
-      console.log($scope.players[0].getBufferLength());
-
       const curTime = new Date().getTime(); // Get current time
       let TotalDataInAnInterval = 0; // Byte
       let TotalTimeInAnInterval = $scope.requestDuration; // ms
@@ -913,6 +913,8 @@ app.controller("DashController", [
         TotalTimeInAnInterval -=
           requestTimeIndex - (curTime - $scope.requestDuration);
       }
+      // 这里强制将分母区间设置为3000
+      TotalTimeInAnInterval = 3000;
       if (TotalDataInAnInterval != 0 && TotalTimeInAnInterval != 0) {
         $scope.totalThroughput = Math.round(
           (8 * TotalDataInAnInterval) / (TotalTimeInAnInterval / 1000)
