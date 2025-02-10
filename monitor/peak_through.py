@@ -1,16 +1,20 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+result_dir = "dynamic"
+
 # 读取CSV文件，确保timeStamp列正确解析为日期时间格式
-csv_data = pd.read_csv('result/static/data.csv', parse_dates=['timeStamp'])
+csv_data = pd.read_csv('result/' + result_dir + '/data.csv', parse_dates=['timeStamp'])
 time_data = csv_data['timeStamp'].to_numpy()
 yaw_data = csv_data['yaw'].to_numpy()
 pitch_data = csv_data['pitch'].to_numpy()
 throughput_data = csv_data['totalThroughput'].to_numpy()
 
+
 def draw_cpu():
     # 读取txt文件
-    data = pd.read_csv('result/static/cpu_usage_log.txt', sep='\s+', header=None, names=['timeStamp', 'cpuUsage'], parse_dates=['timeStamp'])
+    data = pd.read_csv('result/' + result_dir + '/cpu_usage_log.txt', sep='\s+', header=None,
+                       names=['timeStamp', 'cpuUsage'], parse_dates=['timeStamp'])
 
     # 将 timeStamp 转换为 numpy 数组
     time_data = data['timeStamp'].to_numpy()
@@ -38,6 +42,7 @@ def draw_cpu():
     # 保存图片到文件
     plt.tight_layout()
     plt.savefig('cpu_usage.png')  # 保存为PNG文件
+
 
 def draw_throughput():
     # 绘图
@@ -87,6 +92,7 @@ def draw_yaw_pitch():
     plt.tight_layout()
 
     plt.savefig('yaw_pitch_angles.png')  # 保存为PNG文件
+
 
 draw_cpu()
 draw_throughput()
