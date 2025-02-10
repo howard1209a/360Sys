@@ -67,6 +67,14 @@
               Reset
             </button>
             <button
+              id="Download"
+              class="btn btn-primary"
+              type="button"
+              ng-click="download_csv();"
+            >
+              Download
+            </button>
+            <button
               id="Link"
               class="btn btn-primary"
               type="button"
@@ -251,5 +259,19 @@
         </div>
       </div>
     </div>
+
+    <script>
+      // 下载按钮功能
+      function downloadFile() {
+        const content = "这里是文件的内容"; // 替换为你想要下载的内容
+        const blob = new Blob([content], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "download.txt"; // 设置下载文件的名称
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+    </script>
   </body>
 </html>

@@ -481,30 +481,27 @@ app.controller("DashController", [
     }
 
     // 下载csv
-    function download_csv(e) {
-      console.log(e);
+    function download_csv() {
       console.log("END OF PLAYBACK REACHED!!");
       console.log("DOWNLOAD CSV WAS TRIGGERED!!!");
       console.log("$scope.json_output: ", $scope.json_output);
       var json_pre = $scope.json_output;
       var json = json_pre;
-      if (!$scope.download_started) {
-        console.log("downloading CSV...");
-        var csv = JSON2CSV(json, true);
-        var downloadLink = document.createElement("a");
-        var blob = new Blob(["\ufeff", csv]);
-        var url = URL.createObjectURL(blob);
+      console.log("downloading CSV...");
+      var csv = JSON2CSV(json, true);
+      var downloadLink = document.createElement("a");
+      var blob = new Blob(["\ufeff", csv]);
+      var url = URL.createObjectURL(blob);
 
-        downloadLink.id = "download_csv";
-        downloadLink.href = url;
-        downloadLink.download = "data.csv";
+      downloadLink.id = "download_csv";
+      downloadLink.href = url;
+      downloadLink.download = "data.csv";
 
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
 
-        $scope.download_started = true;
-      }
+      $scope.download_started = true;
 
       function JSON2CSV(objArray, header = false) {
         var array =
@@ -559,6 +556,8 @@ app.controller("DashController", [
         return str;
       }
     }
+
+    $scope.download_csv = download_csv;
 
     // 点击Load时执行
     $scope.initial = function () {
@@ -770,7 +769,8 @@ app.controller("DashController", [
       // aframe每渲染一帧执行一次，更新用户视野
       requestAnimationFrame(update_center_viewport);
       // aframe每渲染一帧执行一次，更新输出csv文件
-      requestAnimationFrame(updateOutputFile);
+      // requestAnimationFrame(updateOutputFileInFrame);
+      setInterval(updateOutputFileInTime, 1000);
 
       initChart();
 
@@ -778,8 +778,65 @@ app.controller("DashController", [
       document.getElementById("Play").style = "display: inline;";
     };
 
-    // 更新输出指标
-    function updateOutputFile() {
+    function formatTimestamp(timestamp) {
+      const date = new Date(timestamp * 1000); // 将时间戳转为毫秒级别
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从0开始，所以需要加1
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    function updateOutputFileInTime() {
+      let numPlayer = $scope.players.length;
+      let stringListQuality = "[";
+      let predicted_visible_faces = $scope.get_visible_faces(
+        $scope.yaw,
+        $scope.pitch
+      );
+      for (let i = 0; i < numPlayer - 1; i++)
+        stringListQuality += $scope.players[i].getQualityFor("video") + ";";
+
+      stringListQuality = stringListQuality.slice(
+        0,
+        stringListQuality.length - 1
+      );
+      stringListQuality += "]";
+
+      visibleFaces = "[";
+      percentageVisibleFaces = "[";
+      for (face in predicted_visible_faces) {
+        visibleFaces += face.slice(-1) + ";";
+        percentageVisibleFaces += predicted_visible_faces[face] + ";";
+      }
+
+      visibleFaces = visibleFaces.slice(0, visibleFaces.length - 1);
+      visibleFaces += "]";
+
+      percentageVisibleFaces = percentageVisibleFaces.slice(
+        0,
+        percentageVisibleFaces.length - 1
+      );
+      percentageVisibleFaces += "]";
+
+      let frame_data = {
+        timeStamp: formatTimestamp(Math.floor(Date.now() / 1000)),
+        totalThroughput: $scope.totalThroughput,
+        listQuality: stringListQuality,
+        visibleFaces: visibleFaces,
+        percentageVisibleFaces: percentageVisibleFaces,
+        yaw: Number.parseFloat($scope.yaw).toFixed(4),
+        pitch: Number.parseFloat($scope.pitch).toFixed(4),
+      };
+
+      $scope.json_output.push(frame_data);
+    }
+
+    // 更新输出指标;
+    function updateOutputFileInFrame() {
       let numPlayer = $scope.players.length;
       let stringListQuality = "[";
       let predicted_visible_faces = $scope.get_visible_faces(
