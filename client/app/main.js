@@ -475,10 +475,63 @@ app.controller("DashController", [
     function can_play_event(e) {
       $scope.player_ready++;
       if ($scope.player_ready >= 6) {
+        if ($scope.progress && $scope.progress.length > 0) {
+          for (var i = 0; i < $scope.players.length; i++) {
+            $scope.players[i].seek($scope.progress[i]);
+          }
+          $scope.progress = [];
+        }
+
         console.log("PLAY");
         $scope.play_all();
       }
     }
+
+    $scope.switch_stream = function () {
+      var count = 0;
+      $scope.progress = []; // 用来存储每个播放器的播放进度
+
+      // 获取所有视频播放器的播放进度
+      for (let i = 0; i < $scope.contents.face; i++) {
+        for (let j = 0; j < $scope.contents.row; j++) {
+          for (let k = 0; k < $scope.contents.col; k++) {
+            video = document
+              .getElementById("frame")
+              .contentWindow.document.querySelector(
+                "#" +
+                  "video_" +
+                  [
+                    i * $scope.contents.row * $scope.contents.col +
+                      j * $scope.contents.col +
+                      k,
+                  ]
+              );
+
+            // 获取DASH播放器实例
+            var player = $scope.players[count];
+
+            // 获取当前的播放进度（通过time()方法）
+            $scope.progress.push(player.time());
+
+            // 更新视频的URL
+            url = $scope.contents.baseUrl + $scope.contents.tiles[i][j][k].src;
+
+            if (count == 0) {
+              player.initialize(
+                video,
+                "https://10.29.160.99/data/face7/face0.mpd",
+                false
+              );
+            } else {
+              // 切流并恢复播放进度
+              player.initialize(video, url, false);
+            }
+
+            count++;
+          }
+        }
+      }
+    };
 
     // 下载csv
     function download_csv() {
@@ -771,12 +824,19 @@ app.controller("DashController", [
       // aframe每渲染一帧执行一次，更新输出csv文件
       // requestAnimationFrame(updateOutputFileInFrame);
       setInterval(updateOutputFileInTime, 1000);
+      setInterval(logTime, 1000);
 
       initChart();
 
       document.getElementById("Load").style = "display: none;";
       document.getElementById("Play").style = "display: inline;";
     };
+
+    function logTime() {
+      for (var i = 0; i < 6; i++) {
+        console.log("player" + i + " time:" + $scope.players[i].time());
+      }
+    }
 
     function formatTimestamp(timestamp) {
       const date = new Date(timestamp * 1000); // 将时间戳转为毫秒级别

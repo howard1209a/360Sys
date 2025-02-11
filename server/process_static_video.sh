@@ -35,10 +35,11 @@ exec ffmpeg -hide_banner -loglevel debug \
   -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -b:v:1 50k -maxrate:v:1 55k -bufsize:v:1 60k \
   -map 0:v:0 -c:v:2 libx264 -profile:v:2 main -b:v:2 100k -maxrate:v:2 105k -bufsize:v:2 110k \
   -f dash \
-  -segment_time 2 \
+  -segment_time 12 \
   -segment_list "$OUTPUT/stream.m3u8" \
   -segment_format mp4 \
   -use_template 1 \
   -use_timeline 1 \
   -adaptation_sets "id=0,streams=v" \
   "$OUTPUT/$MPD_NAME.mpd"
+
