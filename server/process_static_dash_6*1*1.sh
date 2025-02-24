@@ -7,7 +7,7 @@ fi
 
 video_num=$1
 base_dir="/Users/howard1209a/Desktop/codes/dash_file/data/formal-testing/dataset/"
-tile_dir="${base_dir}video${video_num}/tile/tile"
+tile_dir="${base_dir}video${video_num}/tile/1*1/tile"
 
 for i in {1..6}
 do
@@ -16,7 +16,7 @@ do
     mkdir -p "${output_tile_dir}"
   fi
 
-  input_tile_video="${base_dir}video${video_num}/tile/video_${video_num}_tile${i}.mp4"
+  input_tile_video="${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile${i}.mp4"
   ffmpeg -hide_banner -loglevel error \
   -i "${input_tile_video}" \
   -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -crf:v:0 18 -g 25 \

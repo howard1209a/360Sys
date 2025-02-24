@@ -66,7 +66,7 @@ app.controller("DashController", [
     $scope.selectedItem = {
       // 默认视频源
       type: "json",
-      value: "https://10.29.160.99/360sys/client/default.json",
+      value: "https://10.29.160.99/360sys/client/json_config/video4_6*2*2.json",
     };
     $scope.optionButton = "Show Options";
     $scope.selectedRule = "FOVRule";
@@ -82,30 +82,29 @@ app.controller("DashController", [
     $scope.availableStreams = [
       // 预设资源链接
       {
-        name: "LVOD",
-        json: "http://localhost/CMPVP907/aframeVP907.json",
+        name: "video9",
+        json: "https://10.29.160.99/360sys/client/json_config/video9_6*2*2.json",
       },
       {
-        name: "SVOD",
-        json: "http://115.156.159.94:8800/CMPVP907/aframeVP907.json",
+        name: "video2",
+        json: "https://10.29.160.99/360sys/client/json_config/video2_6*2*2.json",
       },
       {
-        name: "LIVE",
-        json: "http://222.20.77.111/dash/default.json",
+        name: "video8",
+        json: "https://10.29.160.99/360sys/client/json_config/video8_6*2*2.json",
       },
       {
-        name: "BUNNY",
-        url: "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd",
+        name: "video5",
+        json: "https://10.29.160.99/360sys/client/json_config/video5_6*2*2.json",
+      },
+      {
+        name: "video4",
+        json: "https://10.29.160.99/360sys/client/json_config/video4_6*2*2.json",
       },
     ];
+
     // abr策略列表
-    $scope.rules = [
-      "FOVRule",
-      "HighestBitrateRule",
-      "LowestBitrateRule",
-      "FOVEditRule",
-      "DefaultRule",
-    ];
+    $scope.rules = ["FOVRule", "HighestBitrateRule", "LowestBitrateRule"];
 
     $scope.center_viewport_x = []; // 视野经度列表，值为-pi到pi，实际范围360度，长度为aframe摄像机的帧率
     $scope.center_viewport_y = []; // 视野纬度列表，值为-pi到pi，实际范围180度，长度为aframe摄像机的帧率
@@ -306,6 +305,15 @@ app.controller("DashController", [
       return visibleObjects;
     };
 
+    $scope.setStream = function (item) {
+      if (item.json) {
+        $scope.selectedItem.type = "json";
+        $scope.selectedItem.value = item.json;
+      } else {
+        $scope.selectedItem.type = "url";
+        $scope.selectedItem.value = item.url;
+      }
+    };
     $scope.changeStream = function () {
       console.log($scope.selectedItem.value.slice(-4));
       if (
@@ -653,19 +661,6 @@ app.controller("DashController", [
                 face: i,
                 row: j,
                 col: k,
-                duration: $scope.contents.duration,
-                width: $scope.contents.tiles[i][j][k].width,
-                height: $scope.contents.tiles[i][j][k].height,
-                location: {
-                  x: $scope.contents.tiles[i][j][k].x,
-                  y: $scope.contents.tiles[i][j][k].y,
-                  z: $scope.contents.tiles[i][j][k].z,
-                },
-                rotation: {
-                  rx: $scope.contents.tiles[i][j][k].rx,
-                  ry: $scope.contents.tiles[i][j][k].ry,
-                  rz: $scope.contents.tiles[i][j][k].rz,
-                },
                 totalThroughputNeeded: true,
               },
               streaming: {
@@ -766,49 +761,6 @@ app.controller("DashController", [
             $scope.playerCount++;
           }
         }
-      }
-
-      // todo delete
-      if ($scope.contents.audio && $scope.contents.audio != "") {
-        var audio = document
-          .getElementById("frame")
-          .contentWindow.document.querySelector("#audio");
-        $scope.players[$scope.playerCount] = new dashjs.MediaPlayer().create();
-        url = $scope.contents.baseUrl + $scope.contents.audio;
-        $scope.buffer_empty_flag[$scope.playerCount] = true;
-
-        $scope.players[$scope.playerCount].updateSettings({
-          info: {
-            id: "audio",
-            count: $scope.playerCount,
-            duration: $scope.contents.duration,
-          },
-          //   'debug': {
-          //     'logLevel': dashjs.Debug.LOG_LEVEL_DEBUG
-          // }
-        });
-
-        // Turn on the event listeners and add actions for triggers
-        $scope.players[$scope.playerCount].on(
-          dashjs.MediaPlayer.events["BUFFER_EMPTY"],
-          buffer_empty_event
-        );
-        $scope.players[$scope.playerCount].on(
-          dashjs.MediaPlayer.events["BUFFER_LOADED"],
-          buffer_loaded_event
-        );
-
-        // Initializing
-        $scope.players[$scope.playerCount].initialize(audio, url, false);
-        $scope.playerBufferLength[$scope.playerCount] =
-          $scope.players[$scope.playerCount].getBufferLength();
-        $scope.playerAverageThroughput[$scope.playerCount] =
-          $scope.players[$scope.playerCount].getAverageThroughput("audio");
-        $scope.playerTime[$scope.playerCount] =
-          $scope.players[$scope.playerCount].time();
-        $scope.playerDownloadingQuality[$scope.playerCount] =
-          $scope.players[$scope.playerCount].getQualityFor("audio");
-        $scope.playerCatchUp[$scope.playerCount] = false;
       }
 
       // aframe每渲染一帧执行一次，设置标准时间为所有播放器最快时间
