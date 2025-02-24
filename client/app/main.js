@@ -440,7 +440,6 @@ app.controller("DashController", [
     $scope.play_all = function () {
       for (let i = 0; i < $scope.playerCount; i++) {
         $scope.players[i].play();
-        console.log("Player_" + i + " plays.");
       }
       if ($scope.contents.audio && $scope.contents.audio != "") {
         $scope.players[$scope.playerCount].play();
@@ -473,7 +472,7 @@ app.controller("DashController", [
           return;
         }
         console.log("$scope.player_ready: ", $scope.player_ready);
-        if ($scope.player_ready >= 6) {
+        if ($scope.player_ready >= $scope.playerCount) {
           $scope.play_all();
         }
       }
@@ -482,7 +481,7 @@ app.controller("DashController", [
     // video原生标签解码帧序列就绪时触发，当全部播放器帧就绪时主动播放全部播放器
     function can_play_event(e) {
       $scope.player_ready++;
-      if ($scope.player_ready >= 6) {
+      if ($scope.player_ready >= $scope.playerCount) {
         if ($scope.progress && $scope.progress.length > 0) {
           for (var i = 0; i < $scope.players.length; i++) {
             $scope.players[i].seek($scope.progress[i]);
@@ -785,9 +784,9 @@ app.controller("DashController", [
     };
 
     function logTime() {
-      for (var i = 0; i < 6; i++) {
-        console.log("player" + i + " time:" + $scope.players[i].time());
-      }
+      // for (var i = 0; i < 6; i++) {
+      //   console.log("player" + i + " time:" + $scope.players[i].time());
+      // }
     }
 
     function formatTimestamp(timestamp) {
