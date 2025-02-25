@@ -44,6 +44,8 @@ app.controller("DashController", [
     ($scope.lon = 90), ($scope.lat = 0); // 经纬度
     $scope.contents = {}; // JSON配置
 
+    $scope.userTrackingData = []; // 用户视野追踪模拟数据
+
     $scope.player_ready = 0; // video原生标签帧序列就绪的播放器个数
     $scope.json_output = []; // 输出文件信息
     $scope.download_started = false; // 标记是否已开始下载输出文件
@@ -82,24 +84,44 @@ app.controller("DashController", [
     $scope.availableStreams = [
       // 预设资源链接
       {
-        name: "video9",
+        name: "video9(2*2)",
         json: "https://10.29.160.99/360sys/client/json_config/video9_6*2*2.json",
       },
       {
-        name: "video2",
+        name: "video2(2*2)",
         json: "https://10.29.160.99/360sys/client/json_config/video2_6*2*2.json",
       },
       {
-        name: "video8",
+        name: "video8(2*2)",
         json: "https://10.29.160.99/360sys/client/json_config/video8_6*2*2.json",
       },
       {
-        name: "video5",
+        name: "video5(2*2)",
         json: "https://10.29.160.99/360sys/client/json_config/video5_6*2*2.json",
       },
       {
-        name: "video4",
+        name: "video4(2*2)",
         json: "https://10.29.160.99/360sys/client/json_config/video4_6*2*2.json",
+      },
+      {
+        name: "video9(1*1)",
+        json: "https://10.29.160.99/360sys/client/json_config/video9_6*1*1.json",
+      },
+      {
+        name: "video2(1*1)",
+        json: "https://10.29.160.99/360sys/client/json_config/video2_6*1*1.json",
+      },
+      {
+        name: "video8(1*1)",
+        json: "https://10.29.160.99/360sys/client/json_config/video8_6*1*1.json",
+      },
+      {
+        name: "video5(1*1)",
+        json: "https://10.29.160.99/360sys/client/json_config/video5_6*1*1.json",
+      },
+      {
+        name: "video4(1*1)",
+        json: "https://10.29.160.99/360sys/client/json_config/video4_6*1*1.json",
       },
     ];
 
@@ -762,6 +784,8 @@ app.controller("DashController", [
         }
       }
 
+      loadUserTracking();
+
       // aframe每渲染一帧执行一次，设置标准时间为所有播放器最快时间
       requestAnimationFrame(setNormalizedTime);
       // 每隔一段时间计算一次吞吐量
@@ -772,6 +796,8 @@ app.controller("DashController", [
       requestAnimationFrame(dynamicEditClass);
       // aframe每渲染一帧执行一次，更新用户视野
       requestAnimationFrame(update_center_viewport);
+      // aframe每渲染一帧执行一次，启动用户视野角度轨迹模拟
+      requestAnimationFrame(updateUserTracking);
       // aframe每渲染一帧执行一次，更新输出csv文件
       // requestAnimationFrame(updateOutputFileInFrame);
       setInterval(updateOutputFileInTime, 1000);
@@ -787,6 +813,39 @@ app.controller("DashController", [
       // for (var i = 0; i < 6; i++) {
       //   console.log("player" + i + " time:" + $scope.players[i].time());
       // }
+    }
+
+    function loadUserTracking() {
+      // 如果开启了用户视野轨迹模拟，且传入了视频索引和用户索引
+      if (
+        $scope.userTrackingToggle &&
+        $scope.userTrackingToggle == true &&
+        $scope.videoIndex &&
+        $scope.userTrackingIndex
+      ) {
+        var url =
+          "https://10.29.160.99/data/formal-testing/dataset/video" +
+          $scope.videoIndex +
+          "/motion/u" +
+          $scope.userTrackingIndex +
+          "_preprocessed.csv";
+        fetch(url)
+          .then((response) => response.text())
+          .then((csvData) => {
+            var rows = csvData.split("\n");
+            rows.forEach((row) => {
+              var columns = row.split(",");
+              if (columns.length === 3) {
+                $scope.userTrackingData.push({
+                  index: columns[0],
+                  longitude: parseFloat(columns[1]),
+                  latitude: parseFloat(columns[2]),
+                });
+              }
+            });
+            console.log($scope.userTrackingData);
+          });
+      }
     }
 
     function formatTimestamp(timestamp) {

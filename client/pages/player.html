@@ -160,26 +160,46 @@
               </div>
 
               <!-- 新增的选项区域 -->
-              <div class="options-item-title">Segment length</div>
+              <div class="options-item-title">User Tracking</div>
               <div class="options-item-body">
                 <div class="sub-options-item-body">
+                  <!-- 启动用户轨迹的选项 -->
                   <label data-toggle="tooltip" data-placement="right">
                     <input
-                      id="NewStrategyOption1"
-                      type="radio"
+                      id="userTrackingToggle"
+                      type="checkbox"
                       autocomplete="off"
-                      ng-click="changeABRStrategy('NewStrategyOption1')"
+                      ng-model="userTrackingToggle"
                     />
-                    NewStrategyOption1
+                    Enable User Tracking
                   </label>
+
+                  <!-- 数字输入框：视频选择 -->
                   <label data-toggle="tooltip" data-placement="right">
                     <input
-                      id="NewStrategyOption2"
-                      type="radio"
-                      autocomplete="off"
-                      ng-click="changeABRStrategy('NewStrategyOption2')"
+                      id="videoIndex"
+                      type="number"
+                      min="1"
+                      max="9"
+                      step="1"
+                      ng-model="videoIndex"
+                      placeholder="Enter video index"
                     />
-                    NewStrategyOption2
+                    Video Index
+                  </label>
+
+                  <!-- 数字输入框：用户选择 -->
+                  <label data-toggle="tooltip" data-placement="right">
+                    <input
+                      id="userTrackingIndex"
+                      type="number"
+                      min="1"
+                      max="20"
+                      step="1"
+                      ng-model="userTrackingIndex"
+                      placeholder="Enter user index"
+                    />
+                    User Tracking Index
                   </label>
                 </div>
               </div>
