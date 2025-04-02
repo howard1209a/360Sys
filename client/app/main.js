@@ -51,7 +51,8 @@ app.controller("DashController", [
     $scope.download_started = false; // 标记是否已开始下载输出文件
 
     $scope.normalizedTime = 0; // 设置所有播放器最新的时间为标准时间
-    $scope.totalThroughput = 0; // 视频数据下载吞吐量，每秒更新一次
+    $scope.totalThroughput = 0; // 近期视频数据下载吞吐量，每秒更新一次
+    $scope.totalDownloadTime = 0; // 近期下载单个视频的平均耗时，每秒更新一次
     $scope.playerBufferLength = []; // todo delete
     $scope.playerAverageThroughput = []; // todo delete
     $scope.playerTime = []; // todo delete
@@ -872,10 +873,6 @@ app.controller("DashController", [
     function updateOutputFileInTime() {
       let numPlayer = $scope.players.length;
       let stringListQuality = "[";
-      let predicted_visible_faces = $scope.get_visible_faces(
-        $scope.yaw,
-        $scope.pitch
-      );
       for (let i = 0; i < numPlayer - 1; i++)
         stringListQuality += $scope.players[i].getQualityFor("video") + ";";
 
@@ -887,9 +884,13 @@ app.controller("DashController", [
 
       visibleFaces = "[";
       percentageVisibleFaces = "[";
-      for (face in predicted_visible_faces) {
-        visibleFaces += face.slice(-1) + ";";
-        percentageVisibleFaces += predicted_visible_faces[face] + ";";
+      let current_visible_faces = $scope.get_visible_faces(
+        $scope.current_center_viewport_x,
+        $scope.current_center_viewport_y
+      );
+      for (face in current_visible_faces) {
+        visibleFaces += face + ";";
+        percentageVisibleFaces += current_visible_faces[face] + ";";
       }
 
       visibleFaces = visibleFaces.slice(0, visibleFaces.length - 1);
@@ -904,14 +905,20 @@ app.controller("DashController", [
       let frame_data = {
         // 时间戳
         timeStamp: formatTimestamp(Math.floor(Date.now() / 1000)),
-        // 最近3s内的平均数据吞吐量（系统整体）
+        // 最近3s内的系统网络吞吐量
         totalThroughput: $scope.totalThroughput,
-
+        // 最近3s内的单个视频下载平均耗时
+        totalDownloadTime: $scope.totalDownloadTime,
+        // 当前所有播放器正在播放的视频质量等级
         listQuality: stringListQuality,
+        // 视野内瓦片列表
         visibleFaces: visibleFaces,
+        // 视野内瓦片列表中每个瓦片自身在视野内的比例
         percentageVisibleFaces: percentageVisibleFaces,
-        yaw: Number.parseFloat($scope.yaw).toFixed(4),
-        pitch: Number.parseFloat($scope.pitch).toFixed(4),
+        // 实时视野经度，值为-pi到pi
+        yaw: Number.parseFloat($scope.current_center_viewport_x).toFixed(4),
+        // 实时视野维度，值为-pi到pi
+        pitch: Number.parseFloat($scope.current_center_viewport_y).toFixed(4),
       };
 
       $scope.json_output.push(frame_data);
@@ -1002,11 +1009,22 @@ app.controller("DashController", [
       let requestListLength = $scope.requestList.length;
       let requestListIndex = requestListLength - 1;
       let requestTimeIndex = curTime;
+      let downloadTimeAll = 0;
+      let downloadRequestCount = 0;
       while (requestListLength > 0 && requestListIndex >= 0) {
         let requestFinishTime =
           $scope.requestList[requestListIndex]._tfinish.getTime();
         let requestResponseTime =
           $scope.requestList[requestListIndex].tresponse.getTime();
+        // 下载耗时
+        if (
+          requestFinishTime > curTime - $scope.requestDuration &&
+          requestResponseTime > curTime - $scope.requestDuration
+        ) {
+          downloadTimeAll += requestFinishTime - requestResponseTime;
+          downloadRequestCount++;
+        }
+        // 吞吐量
         if (
           requestFinishTime > curTime - $scope.requestDuration &&
           requestResponseTime < curTime
@@ -1058,6 +1076,7 @@ app.controller("DashController", [
         $scope.totalThroughput = Math.round(
           (8 * TotalDataInAnInterval) / (TotalTimeInAnInterval / 1000)
         ); // bps
+        $scope.totalDownloadTime = downloadTimeAll / downloadRequestCount;
       }
     }
   },
