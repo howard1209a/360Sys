@@ -683,7 +683,10 @@ app.controller("DashController", [
                       k,
                   ],
                 count: $scope.playerCount,
-                face: i,
+                face:
+                  i * $scope.contents.row * $scope.contents.col +
+                  j * $scope.contents.col +
+                  k,
                 row: j,
                 col: k,
                 totalThroughputNeeded: true,
