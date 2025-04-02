@@ -2,13 +2,14 @@ function updateUserTracking() {
   var appElement = document.querySelector("[ng-controller=DashController]");
   var $scope = angular.element(appElement).scope();
 
-  if (!$scope.userTrackingData || $scope.userTrackingData.length == 0) {
-    rotate(0, 0);
-  } else {
+  if ($scope.userTrackingData && $scope.userTrackingData.length > 0) {
     var currentFrameIndex =
       $scope.frameNumber != 0 ? $scope.frameNumber.get() : 0;
     var userTrack = $scope.userTrackingData[currentFrameIndex + 1];
-    rotate(userTrack.latitude - 90, -1 * userTrack.longitude + 180);
+    var latitude = userTrack.latitude - 90;
+    var longitude = -1 * userTrack.longitude + 180;
+    // 旋转摄像机
+    rotate(latitude, longitude);
   }
 
   requestAnimationFrame(updateUserTracking);
@@ -35,4 +36,10 @@ function rotate(latitude, longitude) {
 
   // Set the camera's rotation
   camera.setAttribute("rotation", `${pitch} ${yaw} 0`);
+
+  // 更新实时模拟角度
+  var appElement = document.querySelector("[ng-controller=DashController]");
+  var $scope = angular.element(appElement).scope();
+  $scope.user_tracking_viewport_x = (longitude * Math.PI) / 180;
+  $scope.user_tracking_viewport_y = (latitude * Math.PI) / 90;
 }

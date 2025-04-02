@@ -49,10 +49,6 @@ function update_center_viewport() {
       sky_sphere["head_movement_degree"] = [cvp_x_degree, cvp_y_degree];
       sky_sphere["head_movement_radians"] = [cvp_x_radians, cvp_y_radians];
 
-      //update the center_viewport variables for the linear regression prediction_seconds
-      center_viewport_x.push(cvp_x_radians);
-      center_viewport_y.push(cvp_y_radians);
-
       var frameObj = document.getElementById("frame");
       // console.log("frameObj", frameObj)
       if (frameObj) {
@@ -69,6 +65,15 @@ function update_center_viewport() {
         var currentFrame = $scope.frameNumber.get();
         const nb_samples_viewport = $scope.videoFrameRate;
 
+        // 如果开启用户轨迹模拟，则用户轨迹视野角度要覆盖真实视野角度
+        if ($scope.userTrackingData && $scope.userTrackingData.length > 0) {
+          cvp_x_radians = $scope.user_tracking_viewport_x;
+          cvp_y_radians = $scope.user_tracking_viewport_y;
+        }
+
+        // update the center_viewport variables for the linear regression prediction_seconds
+        center_viewport_x.push(cvp_x_radians);
+        center_viewport_y.push(cvp_y_radians);
         frame_array.push(currentFrame);
 
         if (frame_array.length > nb_samples_viewport) {

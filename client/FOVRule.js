@@ -35,8 +35,17 @@ function FOVRuleClass() {
     // Compute the bitrate according to FOV
     var info = abrController.getSettings().info;
 
-    let center_viewport_x = $scope.current_center_viewport_x;
-    let center_viewport_y = $scope.current_center_viewport_y;
+    // 不要再用实时角度了，下面改为使用预测角度
+    // let center_viewport_x = $scope.current_center_viewport_x;
+    // let center_viewport_y = $scope.current_center_viewport_y;
+
+    // 获取该瓦片对应播放器的buffer长度，根据最近1s的历史视野采用线性回归预测buffer播放完时用户看向哪里
+    var bufferLength = $scope.players[info.count].getBufferLength();
+    var predictedViewport = $scope.predict_center_viewport(
+      bufferLength * $scope.videoFrameRate
+    );
+    let center_viewport_x = predictedViewport[0],
+      center_viewport_y = predictedViewport[1];
 
     let visible_faces = $scope.get_visible_faces(
       center_viewport_x,

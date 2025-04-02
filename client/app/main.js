@@ -133,6 +133,8 @@ app.controller("DashController", [
     $scope.frame_array = []; // 帧序号列表，长度为aframe摄像机的帧率
     $scope.current_center_viewport_x = 0; // 实时视野经度，值为-pi到pi
     $scope.current_center_viewport_y = 0; // 实时视野纬度，值为-pi到pi
+    $scope.user_tracking_viewport_x = 0; // 如果启动了用户视野轨迹模拟，则该变量记录实时的模拟经度
+    $scope.user_tracking_viewport_y = 0; // 如果启动了用户视野轨迹模拟，则该变量记录实时的模拟纬度
     $scope.yaw = 0; // 同current_center_viewport_x
     $scope.pitch = 0; // 同current_center_viewport_y
     $scope.hasEditScheduledValue = false; // edit机制相关
@@ -900,8 +902,11 @@ app.controller("DashController", [
       percentageVisibleFaces += "]";
 
       let frame_data = {
+        // 时间戳
         timeStamp: formatTimestamp(Math.floor(Date.now() / 1000)),
+        // 最近3s内的平均数据吞吐量（系统整体）
         totalThroughput: $scope.totalThroughput,
+
         listQuality: stringListQuality,
         visibleFaces: visibleFaces,
         percentageVisibleFaces: percentageVisibleFaces,
