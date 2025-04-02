@@ -643,6 +643,10 @@ app.controller("DashController", [
 
     // 点击Load时执行
     $scope.initial = function () {
+      if ($scope.contents.row == 2) {
+        initTwoFaceStructure();
+      }
+
       let video, url;
 
       // Video part
