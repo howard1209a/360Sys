@@ -13,7 +13,7 @@ throughput_data = csv_data['totalThroughput'].to_numpy()
 
 def draw_cpu():
     # 读取txt文件
-    data = pd.read_csv('result/' + result_dir + '/cpu_usage_log.txt', sep='\s+', header=None,
+    data = pd.read_csv('result/' + result_dir + '/u1.txt', sep='\s+', header=None,
                        names=['timeStamp', 'cpuUsage'], parse_dates=['timeStamp'])
 
     # 将 timeStamp 转换为 numpy 数组

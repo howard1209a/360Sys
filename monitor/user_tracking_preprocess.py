@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-video_index = 4
+video_index = 2
 
 for user_index in range(1, 11):
     # 读取 CSV 文件

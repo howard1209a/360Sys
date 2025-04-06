@@ -40,17 +40,29 @@ function FOVRuleClass() {
     // let center_viewport_y = $scope.current_center_viewport_y;
 
     // 获取该瓦片对应播放器的buffer长度，根据最近1s的历史视野采用线性回归预测buffer播放完时用户看向哪里
+    var segmentLength = 6;
+    let visible_faces = {};
     var bufferLength = $scope.players[info.count].getBufferLength();
-    var predictedViewport = $scope.predict_center_viewport(
-      bufferLength * $scope.videoFrameRate
-    );
-    let center_viewport_x = predictedViewport[0],
-      center_viewport_y = predictedViewport[1];
+    if (bufferLength == 0) {
+      // 兜底buffer长度为0的情况
+      bufferLength = 0.1;
+    }
+    for (var i = 0; i < segmentLength; i++) {
+      var predictedViewport = $scope.predict_center_viewport(
+        (bufferLength + i) * $scope.videoFrameRate
+      );
+      let center_viewport_x = predictedViewport[0],
+        center_viewport_y = predictedViewport[1];
 
-    let visible_faces = $scope.get_visible_faces(
-      center_viewport_x,
-      center_viewport_y
-    );
+      visible_faces_one_second = $scope.get_visible_faces(
+        center_viewport_x,
+        center_viewport_y
+      );
+      for (k in visible_faces_one_second) {
+        visible_faces[k] = visible_faces_one_second[k];
+      }
+    }
+    console.log(visible_faces);
 
     var priorite = 0;
     for (face in visible_faces) {
