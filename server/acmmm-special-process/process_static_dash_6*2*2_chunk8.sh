@@ -7,7 +7,7 @@ fi
 
 video_num=$1
 base_dir="/Users/howard1209a/Desktop/codes/dash_file/data/formal-testing/dataset/"
-tile_dir="${base_dir}video${video_num}/tile/2*2/chunk2/tile"
+tile_dir="${base_dir}video${video_num}/tile/2*2/chunk8/tile"
 
 for i in {1..6}
 do
@@ -27,8 +27,8 @@ do
       -f dash \
       -use_timeline 1 \
       -use_template 1 \
-      -seg_duration 2 \
-      -min_seg_duration 2000000 \
+      -seg_duration 8 \
+      -min_seg_duration 8000000 \
       -adaptation_sets "id=0,streams=v" \
       "${output_tile_dir}/tile${i}_${j}.mpd"
   done

@@ -234,7 +234,11 @@ app.controller("DashController", [
     };
 
     // 传入经纬度角，返回每个面位于视锥体内点的比例
-    $scope.get_visible_faces = function (cvp_x_radians, cvp_y_radians) {
+    $scope.get_visible_faces = function (
+      cvp_x_radians,
+      cvp_y_radians,
+      isDynamicFov
+    ) {
       var frameObj = document.getElementById("frame");
       var scene = frameObj.contentWindow.document.querySelector("a-scene");
       var camera = scene.camera;
@@ -248,6 +252,11 @@ app.controller("DashController", [
 
         //Copy the actual camera to simulate rotations so that the original camera is not influenced
         var cameraAux = camera.clone();
+        if (isDynamicFov) {
+          // 调整视域大小，我们只会在abr决策查看视野时变换视域
+          cameraAux.fov = 120;
+        }
+        cameraAux.updateProjectionMatrix();
 
         var frustum = new THREE.Frustum();
 
@@ -886,7 +895,8 @@ app.controller("DashController", [
       percentageVisibleFaces = "[";
       let current_visible_faces = $scope.get_visible_faces(
         $scope.current_center_viewport_x,
-        $scope.current_center_viewport_y
+        $scope.current_center_viewport_y,
+        false
       );
       for (face in current_visible_faces) {
         visibleFaces += face + ";";
@@ -930,7 +940,8 @@ app.controller("DashController", [
       let stringListQuality = "[";
       let predicted_visible_faces = $scope.get_visible_faces(
         $scope.yaw,
-        $scope.pitch
+        $scope.pitch,
+        false
       );
       for (let i = 0; i < numPlayer - 1; i++)
         stringListQuality += $scope.players[i].getQualityFor("video") + ";";
