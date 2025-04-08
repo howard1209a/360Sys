@@ -7,7 +7,7 @@ fi
 
 video_num=$1
 base_dir="/Users/howard1209a/Desktop/codes/dash_file/data/formal-testing/dataset/"
-tile_dir="${base_dir}video${video_num}/tile/2*2/chunk2/tile"
+tile_dir="${base_dir}video${video_num}/tile/2*2/chunk1/tile"
 
 for i in {1..6}
 do
@@ -22,13 +22,13 @@ do
 
     ffmpeg -hide_banner -loglevel error \
       -i "${input_tile_video}" \
-      -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -crf:v:0 18 -g 50 -keyint_min 50 -sc_threshold 0 \
-      -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -crf:v:1 51 -g 50 -keyint_min 50 -sc_threshold 0 \
+      -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -crf:v:0 18 -g 25 -keyint_min 25 -sc_threshold 0 \
+      -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -crf:v:1 51 -g 25 -keyint_min 25 -sc_threshold 0 \
       -f dash \
       -use_timeline 1 \
       -use_template 1 \
-      -seg_duration 2 \
-      -min_seg_duration 2000000 \
+      -seg_duration 1 \
+      -min_seg_duration 1000000 \
       -adaptation_sets "id=0,streams=v" \
       "${output_tile_dir}/tile${i}_${j}.mpd"
   done

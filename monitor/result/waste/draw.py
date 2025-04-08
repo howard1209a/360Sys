@@ -42,7 +42,7 @@ def get_bandwidth_list(chunk):
     return bandwidth_list
 
 
-chunk_list = [2, 5, 8]
+chunk_list = [1, 2, 5, 8]
 bandwidth_list_map = {}
 for chunk in chunk_list:
     bandwidth_list_map["chunk" + str(chunk)] = get_bandwidth_list(chunk)
@@ -103,9 +103,9 @@ base_folder_path = '/Users/howard1209a/Desktop/codes/dash_file/360Sys/monitor/re
 
 # fov 与 chunk 的组合
 fov_chunk_map = {
-    'fov120': ['chunk2', 'chunk5', 'chunk8'],
-    'fov80': ['chunk2', 'chunk5', 'chunk8'],
-    'fov40': ['chunk2', 'chunk5', 'chunk8']
+    'fov120': ['chunk1', 'chunk2', 'chunk5', 'chunk8'],
+    'fov80': ['chunk1', 'chunk2', 'chunk5', 'chunk8'],
+    'fov40': ['chunk1', 'chunk2', 'chunk5', 'chunk8']
 }
 
 # 存储数据

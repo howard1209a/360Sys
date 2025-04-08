@@ -40,7 +40,7 @@ function FOVRuleClass() {
     // let center_viewport_y = $scope.current_center_viewport_y;
 
     // 获取该瓦片对应播放器的buffer长度，根据最近1s的历史视野采用线性回归预测buffer播放完时用户看向哪里
-    var segmentLength = 8;
+    var segmentLength = 1;
     let visible_faces = {};
     var bufferLength = $scope.players[info.count].getBufferLength();
     if (bufferLength == 0) {
