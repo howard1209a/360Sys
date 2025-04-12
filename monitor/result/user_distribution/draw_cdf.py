@@ -1,3 +1,4 @@
+import matplotlib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -133,29 +134,31 @@ cdf_vy_5s = np.cumsum(percent_vy_5s)
 cdf_vx_8s = np.cumsum(percent_vx_8s)
 cdf_vy_8s = np.cumsum(percent_vy_8s)
 
+# 设置字体为 Arial，字号为 14
+matplotlib.rcParams['font.family'] = 'Arial'
+matplotlib.rcParams['font.size'] = 14
+
 plt.figure(figsize=(14, 6))
 
 # 经度角速度的CDF
 plt.subplot(1, 2, 1)
-plt.plot(bins_vx_1s[:-1], cdf_vx_1s, marker='o', label='1s', color='skyblue')
-plt.plot(bins_vx_2s[:-1], cdf_vx_2s, marker='s', label='2s', color='lightgreen')
-plt.plot(bins_vx_5s[:-1], cdf_vx_5s, marker='^', label='5s', color='salmon')
-plt.plot(bins_vx_8s[:-1], cdf_vx_8s, marker='x', label='8s', color='orange')
-plt.xlabel('经度角速度（度/秒）')
+plt.plot(bins_vx_1s[:-1], cdf_vx_1s, marker='o', label='1s', color='#B24475')
+plt.plot(bins_vx_2s[:-1], cdf_vx_2s, marker='s', label='2s', color='#864CBC')
+plt.plot(bins_vx_5s[:-1], cdf_vx_5s, marker='^', label='5s', color='#386688')
+plt.plot(bins_vx_8s[:-1], cdf_vx_8s, marker='x', label='8s', color='#845D1C')
+plt.xlabel('Horizontal Angular Velocity(°/s)')
 plt.ylabel('CDF')
-plt.title('所有视频用户的经度角速度CDF')
 plt.grid(True)
 plt.legend()
 
 # 纬度角速度的CDF
 plt.subplot(1, 2, 2)
-plt.plot(bins_vy_1s[:-1], cdf_vy_1s, marker='o', label='1s', color='skyblue')
-plt.plot(bins_vy_2s[:-1], cdf_vy_2s, marker='s', label='2s', color='lightgreen')
-plt.plot(bins_vy_5s[:-1], cdf_vy_5s, marker='^', label='5s', color='salmon')
-plt.plot(bins_vy_8s[:-1], cdf_vy_8s, marker='x', label='8s', color='orange')
-plt.xlabel('纬度角速度（度/秒）')
+plt.plot(bins_vy_1s[:-1], cdf_vy_1s, marker='o', label='1s', color='#B24475')
+plt.plot(bins_vy_2s[:-1], cdf_vy_2s, marker='s', label='2s', color='#864CBC')
+plt.plot(bins_vy_5s[:-1], cdf_vy_5s, marker='^', label='5s', color='#386688')
+plt.plot(bins_vy_8s[:-1], cdf_vy_8s, marker='x', label='8s', color='#845D1C')
+plt.xlabel('Vertical Angular Velocity(°/s)')
 plt.ylabel('CDF')
-plt.title('所有视频用户的纬度角速度CDF')
 plt.grid(True)
 plt.legend()
 

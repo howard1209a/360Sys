@@ -5,6 +5,8 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
+from monitor.result.format_draw import format_draw_histogram
+
 # 注册 MPD 命名空间
 ns = {'mpd': 'urn:mpeg:dash:schema:mpd:2011'}
 
@@ -100,9 +102,9 @@ base_folder_path = '/Users/howard1209a/Desktop/codes/dash_file/360Sys/monitor/re
 
 # fov 与 chunk 的组合
 fov_chunk_map = {
-    'fov120': ['chunk1', 'chunk2', 'chunk5', 'chunk8'],
-    'fov80': ['chunk1', 'chunk2', 'chunk5', 'chunk8'],
-    'fov40': ['chunk1', 'chunk2', 'chunk5', 'chunk8']
+    '40': ['chunk1', 'chunk2', 'chunk5', 'chunk8'],
+    '80': ['chunk1', 'chunk2', 'chunk5', 'chunk8'],
+    '120': ['chunk1', 'chunk2', 'chunk5', 'chunk8']
 }
 
 # 存储数据
@@ -112,7 +114,7 @@ for fov, chunks in fov_chunk_map.items():
     results[fov] = []
     for chunk in chunks:
         chunk_now = chunk
-        folder_name = f'{fov}+{chunk}'
+        folder_name = f'fov{fov}+{chunk}'
         folder_path = os.path.join(base_folder_path, folder_name)
 
         all_data_valid_throughput = []
@@ -134,25 +136,10 @@ for fov, chunks in fov_chunk_map.items():
         results[fov].append(avg_data_valid_throughput)
 
 # 准备绘图数据
-fov_labels = list(results.keys())
-chunk_labels = fov_chunk_map[fov_labels[0]]  # 假设所有fov的chunk组合一致
-x = np.arange(len(fov_labels))  # fov在x轴的位置
-width = 0.2  # 每个柱子的宽度
-
-# 绘图
-fig, ax = plt.subplots()
-
-for idx, chunk in enumerate(chunk_labels):
-    chunk_data_waste = [results[fov][idx] for fov in fov_labels]
-    ax.bar(x + idx * width, chunk_data_waste, width, label=chunk)
-
-# 设置坐标轴
-ax.set_xlabel('FOV')
-ax.set_ylabel('平均数据浪费 (MB)')
-ax.set_title('不同FOV下不同Chunk设置的平均数据浪费')
-ax.set_xticks(x + width / 2)
-ax.set_xticklabels(fov_labels)
-ax.legend(title='Chunk')
-
-plt.tight_layout()
-plt.show()
+labels = list(results.keys())
+data = []
+for label in labels:
+    for index, value in enumerate(results[label]):
+        results[label][index] = value / 8388608.0
+    data.append(results[label])
+format_draw_histogram(["40°×40°", "80°×80°", "120°×120°"], data, "Transmitted Area", "Throughput/MB", 0.09)

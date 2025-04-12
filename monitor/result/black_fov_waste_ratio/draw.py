@@ -5,12 +5,11 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-from monitor.result.format_draw import format_draw_histogram
-
 # 注册 MPD 命名空间
 ns = {'mpd': 'urn:mpeg:dash:schema:mpd:2011'}
 
 
+# 获取带宽列表
 def get_bandwidth_list(chunk):
     base_path = "/Users/howard1209a/Desktop/codes/dash_file/data/formal-testing/dataset/video4/tile/2*2/chunk" + str(
         chunk) + "/"
@@ -44,6 +43,7 @@ def get_bandwidth_list(chunk):
     return bandwidth_list
 
 
+# 获取带宽数据
 chunk_list = [1, 2, 5, 8]
 bandwidth_list_map = {}
 for chunk in chunk_list:
@@ -73,9 +73,6 @@ def extract_tile_ids(s):
     if not raw:
         return []
     return [int(item.split("_")[2]) for item in raw.split(";") if item.strip()]
-
-
-chunk_now = 0
 
 
 # === 计算每秒数据浪费 ===
@@ -115,63 +112,89 @@ fov_chunk_map = {
     'fov40': ['chunk1', 'chunk2', 'chunk5', 'chunk8']
 }
 
-# 存储数据
 results = {}
+# 存储黑边比例结果
+results_black_ratio = {}
 
+# 创建保存图像的目录
+output_dir = './plots'
+os.makedirs(output_dir, exist_ok=True)
+
+# 处理每个 fov 和 chunk
 for fov, chunks in fov_chunk_map.items():
     results[fov] = []
+    results_black_ratio[fov] = []
+
     for chunk in chunks:
         chunk_now = chunk
         folder_name = f'{fov}+{chunk}'
         folder_path = os.path.join(base_folder_path, folder_name)
 
-        all_data_waste_ratio = []
-
-        for i in range(1, 6):
-            file_path = os.path.join(folder_path, f'u{i}.csv')
-            # === 读取数据 ===
+        # 合并 u1 到 u5 数据
+        all_df = pd.DataFrame()
+        for u in range(1, 6):
+            file_path = os.path.join(folder_path, f'u{u}.csv')
             df = pd.read_csv(file_path)
             df["listQuality"] = df["listQuality"].apply(safe_parse_list_quality)
             df["percentageVisibleFaces"] = df["percentageVisibleFaces"].apply(safe_parse_percentage)
             df["visibleFaceIDs"] = df["visibleFaces"].apply(extract_tile_ids)
-            df["dataWasteRatio"] = df.apply(compute_waste, axis=1)
+            all_df = pd.concat([all_df, df], ignore_index=True)
 
-            # 计算每个文件的平均数据浪费
-            avg_waste_ratio = df['dataWasteRatio'].mean()  # 假设 dataWaste 列已在之前计算
-            all_data_waste_ratio.append(avg_waste_ratio)
+        # === 数据浪费率计算 ===
+        all_df["dataWasteRatio"] = all_df.apply(compute_waste, axis=1)
 
-        avg_data_waste = sum(all_data_waste_ratio) / len(all_data_waste_ratio)
-        results[fov].append(avg_data_waste)
+        # === 计算每个数据浪费率区间的平均黑边比例 ===
+        black_ratios = []
+        for idx, row in all_df.iterrows():
+            try:
+                list_quality = row['listQuality']
+                visible_ids = row['visibleFaceIDs']
+                percentages = row['percentageVisibleFaces']
 
-# 准备绘图数据
-labels = list(results.keys())
-data = []
-for label in labels:
-    data.append(results[label])
-data.reverse()
-format_draw_histogram(["40°×40°", "80°×80°", "120°×120°"], data, "Transmitted Area", "Data Waste", 0, 1.25)
+                black_area = 0
+                total_area = 0
 
-# # 准备绘图数据
-# fov_labels = list(results.keys())
-# chunk_labels = fov_chunk_map[fov_labels[0]]  # 假设所有fov的chunk组合一致
-# x = np.arange(len(fov_labels))  # fov在x轴的位置
-# width = 0.2  # 每个柱子的宽度
-#
-# # 绘图
-# fig, ax = plt.subplots()
-#
-# for idx, chunk in enumerate(chunk_labels):
-#     chunk_data_waste = [results[fov][idx] for fov in fov_labels]
-#     ax.bar(x + idx * width, chunk_data_waste, width, label=chunk)
-#
-#
-# # 设置坐标轴
-# ax.set_xlabel('FOV')
-# ax.set_ylabel('平均数据浪费 (MB)')
-# ax.set_title('不同FOV下不同Chunk设置的平均数据浪费')
-# ax.set_xticks(x + width / 2)
-# ax.set_xticklabels(fov_labels)
-# ax.legend(title='Chunk')
-#
-# plt.tight_layout()
-# plt.show()
+                for vid, area in zip(visible_ids, percentages):
+                    if 0 <= vid <= 22:
+                        total_area += area
+                        if list_quality[vid] == 0:
+                            black_area += area
+
+                black_ratio = black_area / total_area if total_area > 0 else 0
+                black_ratios.append(black_ratio)
+            except Exception as e:
+                print(f"黑边比例计算错误 - 第{idx}行: {e}")
+                black_ratios.append(0)
+
+        all_df['blackRatio'] = black_ratios
+
+        # 过滤数据冗余率为80%到100%的区间
+        all_df = all_df[all_df["dataWasteRatio"] < 0.8]
+
+        # 分区间计算黑边比例
+        bins = np.linspace(0, 0.8, 4)  # 数据冗余率区间
+        bin_labels = [f"{round(bins[i], 2)}-{round(bins[i + 1], 2)}" for i in range(len(bins) - 1)]
+
+        # 将数据冗余率映射到对应的区间
+        all_df['dataWasteBin'] = pd.cut(all_df['dataWasteRatio'], bins=bins, labels=bin_labels, include_lowest=True)
+
+        # 计算每个区间的平均黑边比例
+        avg_black_ratios = all_df.groupby('dataWasteBin')['blackRatio'].mean()
+
+        # 保存结果
+        results_black_ratio[fov + '+' + chunk] = avg_black_ratios
+
+        # === 绘图 ===
+        plt.figure(figsize=(10, 6))
+        avg_black_ratios.plot(kind='bar', color='skyblue')
+        plt.xlabel("数据冗余率区间")
+        plt.ylabel("平均黑边比例")
+        plt.title(f"{fov}+{chunk} 的数据冗余率区间 vs 平均黑边比例")
+        plt.xticks(rotation=45)
+        plt.grid(True)
+
+        # 保存图像
+        output_path = os.path.join(output_dir, f"{fov}_{chunk}_bar.png")
+        plt.savefig(output_path)
+        plt.close()
+        print(f"保存图像: {output_path}")

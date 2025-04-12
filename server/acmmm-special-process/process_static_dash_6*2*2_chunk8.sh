@@ -22,8 +22,8 @@ do
 
     ffmpeg -hide_banner -loglevel error \
       -i "${input_tile_video}" \
-      -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -crf:v:0 18 -g 50 -keyint_min 50 -sc_threshold 0 \
-      -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -crf:v:1 51 -g 50 -keyint_min 50 -sc_threshold 0 \
+      -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -crf:v:0 18 -g 200 -keyint_min 200 -sc_threshold 0 \
+      -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -crf:v:1 51 -g 200 -keyint_min 200 -sc_threshold 0 \
       -f dash \
       -use_timeline 1 \
       -use_template 1 \
