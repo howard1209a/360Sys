@@ -1,14 +1,32 @@
 {
-	"baseUrl": "https://10.29.160.99/data/formal-testing/dataset/video9/tile/2*2/",
-	"face": 6,
-	"row": 2,
-	"col": 2,
-    "tiles": [
-		[[{"src": "tile1_1/tile1_1.mpd"},{"src": "tile1_2/tile1_2.mpd"}],[{"src": "tile1_3/tile1_3.mpd"},{"src": "tile1_4/tile1_4.mpd"}]],
-		[[{"src": "tile2_1/tile2_1.mpd"},{"src": "tile2_2/tile2_2.mpd"}],[{"src": "tile2_3/tile2_3.mpd"},{"src": "tile2_4/tile2_4.mpd"}]],
-        [[{"src": "tile3_1/tile3_1.mpd"},{"src": "tile3_2/tile3_2.mpd"}],[{"src": "tile3_3/tile3_3.mpd"},{"src": "tile3_4/tile3_4.mpd"}]],
-        [[{"src": "tile4_1/tile4_1.mpd"},{"src": "tile4_2/tile4_2.mpd"}],[{"src": "tile4_3/tile4_3.mpd"},{"src": "tile4_4/tile4_4.mpd"}]],
-        [[{"src": "tile5_1/tile5_1.mpd"},{"src": "tile5_2/tile5_2.mpd"}],[{"src": "tile5_3/tile5_3.mpd"},{"src": "tile5_4/tile5_4.mpd"}]],
-        [[{"src": "tile6_1/tile6_1.mpd"},{"src": "tile6_2/tile6_2.mpd"}],[{"src": "tile6_3/tile6_3.mpd"},{"src": "tile6_4/tile6_4.mpd"}]]
-	]
+  "baseUrl": "https://localhost/data/formal-testing/dataset/video9/tile/2*2/",
+  "face": 6,
+  "row": 2,
+  "col": 2,
+  "tiles": [
+    [
+      [{ "src": "tile1_1/tile1_1.mpd" }, { "src": "tile1_2/tile1_2.mpd" }],
+      [{ "src": "tile1_3/tile1_3.mpd" }, { "src": "tile1_4/tile1_4.mpd" }]
+    ],
+    [
+      [{ "src": "tile2_1/tile2_1.mpd" }, { "src": "tile2_2/tile2_2.mpd" }],
+      [{ "src": "tile2_3/tile2_3.mpd" }, { "src": "tile2_4/tile2_4.mpd" }]
+    ],
+    [
+      [{ "src": "tile3_1/tile3_1.mpd" }, { "src": "tile3_2/tile3_2.mpd" }],
+      [{ "src": "tile3_3/tile3_3.mpd" }, { "src": "tile3_4/tile3_4.mpd" }]
+    ],
+    [
+      [{ "src": "tile4_1/tile4_1.mpd" }, { "src": "tile4_2/tile4_2.mpd" }],
+      [{ "src": "tile4_3/tile4_3.mpd" }, { "src": "tile4_4/tile4_4.mpd" }]
+    ],
+    [
+      [{ "src": "tile5_1/tile5_1.mpd" }, { "src": "tile5_2/tile5_2.mpd" }],
+      [{ "src": "tile5_3/tile5_3.mpd" }, { "src": "tile5_4/tile5_4.mpd" }]
+    ],
+    [
+      [{ "src": "tile6_1/tile6_1.mpd" }, { "src": "tile6_2/tile6_2.mpd" }],
+      [{ "src": "tile6_3/tile6_3.mpd" }, { "src": "tile6_4/tile6_4.mpd" }]
+    ]
+  ]
 }

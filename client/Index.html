@@ -2,6 +2,7 @@
 <html lang="en" ng-app="myapp">
   <head>
     <meta charset="UTF-8" />
+
     <link rel="stylesheet" href="app/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="app/lib/bootstrap/css/bootstrap-theme.css" />
     <link
@@ -14,7 +15,7 @@
       href="app/contrib/akamai/controlbar/controlbar.css"
     />
 
-    <title>360EAV Player</title>
+    <title>沉浸式视频直播原型系统</title>
     <script src="app/lib/jquery/jquery-3.1.1.min.js"></script>
 
     <script src="app/lib/angular/angular.min.js"></script>
@@ -34,40 +35,24 @@
     <script src="app/contrib/akamai/controlbar/ControlBar.js"></script>
 
     <script src="dash.js/dist/dash.all.debug.js"></script>
+
+    <script src="aframe/dist/aframe-master.js"></script>
+
     <script src="app/main.js"></script>
     <script src="edit/editInfo.js"></script>
     <script src="edit/dynamicEdit.js"></script>
-
-    <script src="aframe/dist/aframe-master.js"></script>
+    <script src="edit/userTracking.js"></script>
     <script src="viewport_utils/faceStructure.js"></script>
     <script src="viewport_utils/viewportUtils.js"></script>
     <script src="chart/dynamic_chart.js"></script>
 
-    <script src="FOVRule.js" class="code"></script>
-    <script src="MyThroughputRule.js" class="code"></script>
-    <script src="HighestBitrateRule.js" class="code"></script>
-    <script src="LowestBitrateRule.js" class="code"></script>
-    <script src="FOVEditRule.js" class="code"></script>
-
-    <script src="edit/userTracking.js" class="code"></script>
+    <script src="FOVRule.js"></script>
+    <script src="MyThroughputRule.js"></script>
+    <script src="HighestBitrateRule.js"></script>
+    <script src="LowestBitrateRule.js"></script>
+    <script src="FOVEditRule.js"></script>
   </head>
   <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">360EAV Player</a>
-        </div>
-        <div>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#/">Home</a></li>
-            <li><a href="#/about">About</a></li>
-            <li><a href="#/contact">Contact</a></li>
-            <li><a href="#/player">Player</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
     <div class="container">
       <ng-view></ng-view>
     </div>

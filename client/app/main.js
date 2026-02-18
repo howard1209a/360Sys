@@ -69,7 +69,7 @@ app.controller("DashController", [
     $scope.selectedItem = {
       // 默认视频源
       type: "json",
-      value: "https://10.29.160.99/360sys/client/json_config/video4_6*2*2.json",
+      value: "https://localhost/360sys/client/json_config/video4_6*2*2.json",
     };
     $scope.optionButton = "Show Options";
     $scope.selectedRule = "FOVRule";
@@ -86,43 +86,43 @@ app.controller("DashController", [
       // 预设资源链接
       {
         name: "video9(2*2)",
-        json: "https://10.29.160.99/360sys/client/json_config/video9_6*2*2.json",
+        json: "https://localhost/360sys/client/json_config/video9_6*2*2.json",
       },
       {
         name: "video2(2*2)",
-        json: "https://10.29.160.99/360sys/client/json_config/video2_6*2*2.json",
+        json: "https://localhost/360sys/client/json_config/video2_6*2*2.json",
       },
       {
         name: "video8(2*2)",
-        json: "https://10.29.160.99/360sys/client/json_config/video8_6*2*2.json",
+        json: "https://localhost/360sys/client/json_config/video8_6*2*2.json",
       },
       {
         name: "video5(2*2)",
-        json: "https://10.29.160.99/360sys/client/json_config/video5_6*2*2.json",
+        json: "https://localhost/360sys/client/json_config/video5_6*2*2.json",
       },
       {
         name: "video4(2*2)",
-        json: "https://10.29.160.99/360sys/client/json_config/video4_6*2*2.json",
+        json: "https://localhost/360sys/client/json_config/video4_6*2*2.json",
       },
       {
         name: "video9(1*1)",
-        json: "https://10.29.160.99/360sys/client/json_config/video9_6*1*1.json",
+        json: "https://localhost/360sys/client/json_config/video9_6*1*1.json",
       },
       {
         name: "video2(1*1)",
-        json: "https://10.29.160.99/360sys/client/json_config/video2_6*1*1.json",
+        json: "https://localhost/360sys/client/json_config/video2_6*1*1.json",
       },
       {
         name: "video8(1*1)",
-        json: "https://10.29.160.99/360sys/client/json_config/video8_6*1*1.json",
+        json: "https://localhost/360sys/client/json_config/video8_6*1*1.json",
       },
       {
         name: "video5(1*1)",
-        json: "https://10.29.160.99/360sys/client/json_config/video5_6*1*1.json",
+        json: "https://localhost/360sys/client/json_config/video5_6*1*1.json",
       },
       {
         name: "video4(1*1)",
-        json: "https://10.29.160.99/360sys/client/json_config/video4_6*1*1.json",
+        json: "https://localhost/360sys/client/json_config/video4_6*1*1.json",
       },
     ];
 
@@ -560,7 +560,7 @@ app.controller("DashController", [
             if (count == 0) {
               player.initialize(
                 video,
-                "https://10.29.160.99/data/face7/face0.mpd",
+                "https://localhost/data/face7/face0.mpd",
                 false
               );
             } else {
@@ -843,7 +843,7 @@ app.controller("DashController", [
         $scope.userTrackingIndex
       ) {
         var url =
-          "https://10.29.160.99/data/formal-testing/dataset/video" +
+          "https://localhost/data/formal-testing/dataset/video" +
           $scope.videoIndex +
           "/motion/u" +
           $scope.userTrackingIndex +

@@ -1,14 +1,14 @@
 {
-	"baseUrl": "https://10.29.160.99/data/formal-testing/dataset/video9/tile/1*1/",
-	"face": 6,
-	"row": 1,
-	"col": 1,
-    "tiles": [
-		[[{"src": "tile1/tile1.mpd"}]],
-		[[{"src": "tile2/tile2.mpd"}]],
-		[[{"src": "tile3/tile3.mpd"}]],
-		[[{"src": "tile4/tile4.mpd"}]],
-		[[{"src": "tile5/tile5.mpd"}]],
-		[[{"src": "tile6/tile6.mpd"}]]
-	]
+  "baseUrl": "https://localhost/data/formal-testing/dataset/video9/tile/1*1/",
+  "face": 6,
+  "row": 1,
+  "col": 1,
+  "tiles": [
+    [[{ "src": "tile1/tile1.mpd" }]],
+    [[{ "src": "tile2/tile2.mpd" }]],
+    [[{ "src": "tile3/tile3.mpd" }]],
+    [[{ "src": "tile4/tile4.mpd" }]],
+    [[{ "src": "tile5/tile5.mpd" }]],
+    [[{ "src": "tile6/tile6.mpd" }]]
+  ]
 }
