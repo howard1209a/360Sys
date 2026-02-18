@@ -3,7 +3,7 @@
 <html ng-app="DashPlayer" lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>(^_^)~ VR PLAYER ~(^_^)</title>
+    <title>沉浸式视频直播原型系统</title>
 
     <style>
       body {
@@ -18,7 +18,6 @@
     <div class="container" ng-controller="DashController">
       <div class="row title-header">
         <div class="branding">
-          <!-- <a href="http://dashif.org/" target="_blank"><img class="image" src="./img/if.png"/></a> -->
           <span id="big-title">沉浸式视频直播原型系统</span>
         </div>
       </div>
@@ -31,7 +30,7 @@
               class="btn btn-primary dropdown-toggle"
               data-toggle="dropdown"
             >
-              Stream <span class="caret"></span>
+              视频流 <span class="caret"></span>
             </button>
             <ul
               class="dropdown-menu"
@@ -64,15 +63,7 @@
               type="button"
               onclick="location.reload();"
             >
-              Reset
-            </button>
-            <button
-              id="Switch"
-              class="btn btn-primary"
-              type="button"
-              ng-click="switch_stream();"
-            >
-              Switch
+              重置
             </button>
             <button
               id="Download"
@@ -80,7 +71,7 @@
               type="button"
               ng-click="download_csv();"
             >
-              Download
+              下载日志
             </button>
             <button
               id="Link"
@@ -88,7 +79,7 @@
               type="button"
               ng-click="selectedItem.type=='json' ? openJSON(selectedItem.value) : openURLs(selectedItem.value);"
             >
-              Link
+              解析
             </button>
             <button
               id="Render"
@@ -97,7 +88,7 @@
               style="display: none"
               ng-click="aframe_init();"
             >
-              Render
+              加载
             </button>
             <button
               id="Load"
@@ -106,7 +97,7 @@
               style="display: none"
               ng-click="initial();"
             >
-              Load
+              初始化
             </button>
             <button
               id="Play"
@@ -114,7 +105,7 @@
               style="display: none"
               ng-click="play_all();"
             >
-              Play
+              播放
             </button>
             <button
               id="Pause"
@@ -122,7 +113,7 @@
               style="display: none"
               ng-click="pause_all();"
             >
-              Pause
+              暂停
             </button>
             <div id="option" style="display: none">
               <div class="options-item-title">ABR Strategy</div>

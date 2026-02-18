@@ -1,35 +1,10 @@
 var app = angular.module("myapp", ["ngRoute"]);
 
 app.config(function ($routeProvider, $locationProvider) {
-  $routeProvider
-    .when("/", {
-      templateUrl: "pages/home.html",
-      controller: "HomeController",
-    })
-    .when("/about", {
-      templateUrl: "pages/about.html",
-      controller: "AboutController",
-    })
-    .when("/contact", {
-      templateUrl: "pages/contact.html",
-      controller: "ContactController",
-    })
-    .when("/player", {
-      templateUrl: "pages/player.html",
-      controller: "DashController",
-    });
-});
-
-app.controller("HomeController", function ($scope) {
-  $scope.message = "Routing pages with ngRoute is damn awesome!";
-});
-
-app.controller("AboutController", function ($scope) {
-  $scope.message = "You can see more about ngRoute in the oficial website.";
-});
-
-app.controller("ContactController", function ($scope) {
-  $scope.message = "No. :P";
+  $routeProvider.when("/player", {
+    templateUrl: "pages/player.html",
+    controller: "DashController",
+  });
 });
 
 app.controller("DashController", [
@@ -46,24 +21,14 @@ app.controller("DashController", [
 
     $scope.userTrackingData = []; // 用户视野追踪模拟数据
 
-    $scope.player_ready = 0; // video原生标签帧序列就绪的播放器个数
     $scope.json_output = []; // 输出文件信息
-    $scope.download_started = false; // 标记是否已开始下载输出文件
 
     $scope.normalizedTime = 0; // 设置所有播放器最新的时间为标准时间
     $scope.totalThroughput = 0; // 近期视频数据下载吞吐量，每秒更新一次
     $scope.totalDownloadTime = 0; // 近期下载单个视频的平均耗时，每秒更新一次
-    $scope.playerBufferLength = []; // todo delete
-    $scope.playerAverageThroughput = []; // todo delete
-    $scope.playerTime = []; // todo delete
-    $scope.playerDownloadingQuality = []; // todo delete
-    $scope.playerFOVScore = []; // todo delete
-    $scope.playerContentScore = []; // todo delete
-    $scope.playerPastDownloadingQuality = []; // todo delete
-    $scope.playerCatchUp = []; // todo delete
-    $scope.playerDivation = []; // todo delete
+    $scope.playerBufferLength = []; // 全部播放器实时缓冲区长度
+    $scope.playerAverageThroughput = []; // ？
 
-    $scope.playerBitrateList = []; // todo delete
     $scope.requestList = []; // 由dash内部注入，保存了全部播放器的http请求，按照请求结束下载时间从小到大排序
 
     $scope.selectedItem = {
@@ -71,7 +36,7 @@ app.controller("DashController", [
       type: "json",
       value: "https://localhost/360sys/client/json_config/video4_6*2*2.json",
     };
-    $scope.optionButton = "Show Options";
+    $scope.optionButton = "展示选项";
     $scope.selectedRule = "FOVRule";
 
     $scope.requestDuration = 3000; // 计算吞吐量的区间长度
@@ -85,43 +50,43 @@ app.controller("DashController", [
     $scope.availableStreams = [
       // 预设资源链接
       {
-        name: "video9(2*2)",
+        name: "Drone Footage(2*2)",
         json: "https://localhost/360sys/client/json_config/video9_6*2*2.json",
       },
       {
-        name: "video2(2*2)",
+        name: "Hog Rider(2*2)",
         json: "https://localhost/360sys/client/json_config/video2_6*2*2.json",
       },
       {
-        name: "video8(2*2)",
+        name: "Pig Life Animation(2*2)",
         json: "https://localhost/360sys/client/json_config/video8_6*2*2.json",
       },
       {
-        name: "video5(2*2)",
+        name: "Roller Coaster(2*2)",
         json: "https://localhost/360sys/client/json_config/video5_6*2*2.json",
       },
       {
-        name: "video4(2*2)",
+        name: "Super Mario(2*2)",
         json: "https://localhost/360sys/client/json_config/video4_6*2*2.json",
       },
       {
-        name: "video9(1*1)",
+        name: "Drone Footage(1*1)",
         json: "https://localhost/360sys/client/json_config/video9_6*1*1.json",
       },
       {
-        name: "video2(1*1)",
+        name: "Hog Rider(1*1)",
         json: "https://localhost/360sys/client/json_config/video2_6*1*1.json",
       },
       {
-        name: "video8(1*1)",
+        name: "Pig Life Animation(1*1)",
         json: "https://localhost/360sys/client/json_config/video8_6*1*1.json",
       },
       {
-        name: "video5(1*1)",
+        name: "Roller Coaster(1*1)",
         json: "https://localhost/360sys/client/json_config/video5_6*1*1.json",
       },
       {
-        name: "video4(1*1)",
+        name: "Super Mario(1*1)",
         json: "https://localhost/360sys/client/json_config/video4_6*1*1.json",
       },
     ];
@@ -362,13 +327,13 @@ app.controller("DashController", [
 
     // For setting up the ABR rule
     $scope.showoption = function () {
-      if ($scope.optionButton == "Show Options") {
+      if ($scope.optionButton == "展示选项") {
         document.getElementById("option").style =
           "background-color: #e2e1e4; z-index: 1000; position: absolute;";
-        $scope.optionButton = "Hide Options";
+        $scope.optionButton = "隐藏选项";
       } else {
         document.getElementById("option").style = "display: none;";
-        $scope.optionButton = "Show Options";
+        $scope.optionButton = "展示选项";
       }
     };
 
@@ -401,9 +366,6 @@ app.controller("DashController", [
       $scope.contents = {};
       getContents(url, function () {
         $scope.contents = JSON.parse(this.responseText);
-        if ($scope.contents.edits) {
-          console.log($scope.contents.edits);
-        }
         document.getElementById("Link").style = "display: none;";
         document.getElementById("Render").style = "display: inline;";
       });
@@ -450,21 +412,15 @@ app.controller("DashController", [
         "_" +
         $scope.contents.col +
         ".html";
-      $scope.lon = 90;
-      $scope.lat = 0;
       document.getElementById("Render").style = "display: none;";
       document.getElementById("Load").style = "display: inline;";
     };
 
     // 暂停全部播放器
     $scope.pause_all = function () {
+      console.log("pause!");
       for (let i = 0; i < $scope.playerCount; i++) {
         $scope.players[i].pause();
-        console.log("Player_" + i + " pauses.");
-      }
-      if ($scope.contents.audio && $scope.contents.audio != "") {
-        $scope.players[$scope.playerCount].pause();
-        console.log("Audio pauses.");
       }
       document.getElementById("Pause").style = "display: none;";
       document.getElementById("Play").style = "display: inline;";
@@ -475,10 +431,6 @@ app.controller("DashController", [
       for (let i = 0; i < $scope.playerCount; i++) {
         $scope.players[i].play();
       }
-      if ($scope.contents.audio && $scope.contents.audio != "") {
-        $scope.players[$scope.playerCount].play();
-        console.log("Audio plays.");
-      }
       document.getElementById("Play").style = "display: none;";
       document.getElementById("Pause").style = "display: inline;";
     };
@@ -486,10 +438,10 @@ app.controller("DashController", [
     // 任意播放器卡顿时触发，主动暂停全部播放器
     function buffer_empty_event(e) {
       $scope.buffer_empty_flag[e.info.count] = true;
-      // $scope.pause_all();
+      $scope.pause_all();
     }
 
-    // 任意播放器卡顿后重新加载完成时触发，当全部播放器帧就绪时主动播放全部播放器
+    // 任意播放器缓冲区从空变为有数据时触发，当全部播放器帧就绪时主动播放全部播放器
     function buffer_loaded_event(e) {
       if ($scope.buffer_empty_flag[e.info.count] == true) {
         $scope.buffer_empty_flag[e.info.count] = false;
@@ -498,90 +450,16 @@ app.controller("DashController", [
             return;
           }
         }
-        if (
-          $scope.contents.audio &&
-          $scope.contents.audio != "" &&
-          $scope.buffer_empty_flag[$scope.playerCount] == true
-        ) {
-          return;
-        }
-        console.log("$scope.player_ready: ", $scope.player_ready);
-        if ($scope.player_ready >= $scope.playerCount) {
-          $scope.play_all();
-        }
-      }
-    }
-
-    // video原生标签解码帧序列就绪时触发，当全部播放器帧就绪时主动播放全部播放器
-    function can_play_event(e) {
-      $scope.player_ready++;
-      if ($scope.player_ready >= $scope.playerCount) {
-        if ($scope.progress && $scope.progress.length > 0) {
-          for (var i = 0; i < $scope.players.length; i++) {
-            $scope.players[i].seek($scope.progress[i]);
-          }
-          $scope.progress = [];
-        }
-
-        console.log("PLAY");
+        console.log("play!");
         $scope.play_all();
       }
     }
 
-    $scope.switch_stream = function () {
-      var count = 0;
-      $scope.progress = []; // 用来存储每个播放器的播放进度
-
-      // 获取所有视频播放器的播放进度
-      for (let i = 0; i < $scope.contents.face; i++) {
-        for (let j = 0; j < $scope.contents.row; j++) {
-          for (let k = 0; k < $scope.contents.col; k++) {
-            video = document
-              .getElementById("frame")
-              .contentWindow.document.querySelector(
-                "#" +
-                  "video_" +
-                  [
-                    i * $scope.contents.row * $scope.contents.col +
-                      j * $scope.contents.col +
-                      k,
-                  ]
-              );
-
-            // 获取DASH播放器实例
-            var player = $scope.players[count];
-
-            // 获取当前的播放进度（通过time()方法）
-            $scope.progress.push(player.time());
-
-            // 更新视频的URL
-            url = $scope.contents.baseUrl + $scope.contents.tiles[i][j][k].src;
-
-            if (count == 0) {
-              player.initialize(
-                video,
-                "https://localhost/data/face7/face0.mpd",
-                false
-              );
-            } else {
-              // 切流并恢复播放进度
-              player.initialize(video, url, false);
-            }
-
-            count++;
-          }
-        }
-      }
-    };
-
-    // 下载csv
+    // 下载csv日志文件
     function download_csv() {
-      console.log("END OF PLAYBACK REACHED!!");
-      console.log("DOWNLOAD CSV WAS TRIGGERED!!!");
+      console.log("start download csv log...");
       console.log("$scope.json_output: ", $scope.json_output);
-      var json_pre = $scope.json_output;
-      var json = json_pre;
-      console.log("downloading CSV...");
+      var json = $scope.json_output;
       var csv = JSON2CSV(json, true);
       var downloadLink = document.createElement("a");
       var blob = new Blob(["\ufeff", csv]);
@@ -594,8 +472,6 @@ app.controller("DashController", [
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
-
-      $scope.download_started = true;
 
       function JSON2CSV(objArray, header = false) {
         var array =
@@ -612,45 +488,17 @@ app.controller("DashController", [
           str += "\r\n";
         }
 
-        if ($("#labels").is(":checked")) {
-          var head = array[0];
-          if ($("#quote").is(":checked")) {
-            for (var index in array[0]) {
-              var value = index + "";
-              line += '"' + value.replace(/"/g, '""') + '",';
-            }
-          } else {
-            for (var index in array[0]) {
-              line += index + ",";
-            }
-          }
-
-          line = line.slice(0, -1);
-          str += line + "\r\n";
-        }
-
         for (var i = 0; i < array.length; i++) {
           var line = "";
-
-          if ($("#quote").is(":checked")) {
-            for (var index in array[i]) {
-              var value = array[i][index] + "";
-              line += '"' + value.replace(/"/g, '""') + '",';
-            }
-          } else {
-            for (var index in array[i]) {
-              line += array[i][index] + ",";
-            }
+          for (var index in array[i]) {
+            line += array[i][index] + ",";
           }
-
           line = line.slice(0, -1);
-          download_csv;
           str += line + "\r\n";
         }
         return str;
       }
     }
-
     $scope.download_csv = download_csv;
 
     // 点击Load时执行
@@ -775,10 +623,6 @@ app.controller("DashController", [
             );
 
             $scope.players[$scope.playerCount].on(
-              dashjs.MediaPlayer.events["CAN_PLAY"],
-              can_play_event
-            );
-            $scope.players[$scope.playerCount].on(
               dashjs.MediaPlayer.events["PLAYBACK_ENDED"],
               download_csv
             );
@@ -789,14 +633,6 @@ app.controller("DashController", [
               $scope.players[$scope.playerCount].getBufferLength();
             $scope.playerAverageThroughput[$scope.playerCount] =
               $scope.players[$scope.playerCount].getAverageThroughput("video");
-            $scope.playerTime[$scope.playerCount] =
-              $scope.players[$scope.playerCount].time();
-            $scope.playerDownloadingQuality[$scope.playerCount] =
-              $scope.players[$scope.playerCount].getQualityFor("video");
-            $scope.playerFOVScore[$scope.playerCount] = NaN;
-            $scope.playerContentScore[$scope.playerCount] = NaN;
-            $scope.playerBitrateList[$scope.playerCount] = [];
-            $scope.playerCatchUp[$scope.playerCount] = false;
 
             $scope.playerCount++;
           }
@@ -1001,11 +837,6 @@ app.controller("DashController", [
       for (let i = 0; i < $scope.playerCount; i++) {
         if ($scope.players[i].time() > $scope.normalizedTime) {
           $scope.normalizedTime = $scope.players[i].time();
-        }
-      }
-      if ($scope.contents.audio && $scope.contents.audio != "") {
-        if ($scope.players[$scope.playerCount].time() > $scope.normalizedTime) {
-          $scope.normalizedTime = $scope.players[$scope.playerCount].time();
         }
       }
       $scope.$apply();

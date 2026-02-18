@@ -93,14 +93,14 @@ function FOVRuleClass() {
     //         break;
     //     }
     // }
-    console.log(
-      "info.face",
-      info.face,
-      "priorite",
-      priorite,
-      "quality",
-      switchRequest.quality
-    );
+    // console.log(
+    //   "info.face",
+    //   info.face,
+    //   "priorite",
+    //   priorite,
+    //   "quality",
+    //   switchRequest.quality
+    // );
 
     return switchRequest;
   }
@@ -111,18 +111,6 @@ function FOVRuleClass() {
     if (!info) {
       console.log("Lack of info when computing FOV-based qualities!!!");
       return 0;
-    }
-
-    if ($scope.playerFOVScore && $scope.playerFOVScore[info.count]) {
-      return $scope.playerFOVScore[info.count];
-    }
-
-    if ($scope.playerDivation && $scope.playerDivation[info.count]) {
-      return (
-        100 *
-        (($scope.playerDivation[info.count] - Math.min($scope.playerDivation)) /
-          (Math.max($scope.playerDivation) - Math.min($scope.playerDivation)))
-      );
     }
 
     if (

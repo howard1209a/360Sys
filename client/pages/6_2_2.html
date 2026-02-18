@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>VRE_PLAYER</title>
+    <title></title>
 
     <script src="../app/lib/jquery/jquery-3.1.1.min.js"></script>
 
@@ -15,6 +15,7 @@
     <script src="../video_frame/VideoFrame.min.js"></script>
 
     <script src="../aframe/dist/aframe-master.js"></script>
+
     <script src="../viewport_utils/faceStructure.js"></script>
     <script src="../viewport_utils/viewportUtils.js"></script>
 
@@ -29,9 +30,6 @@
         return 2 * Math.PI * cvp_norm - Math.PI;
       }
 
-      var head_position_2_face_visible = [];
-      var current_quaternion;
-
       AFRAME.registerComponent("do-something-on-head-movement", {
         init: function () {
           this.tick = AFRAME.utils.throttleTick(
@@ -39,14 +37,12 @@
             sample_cadence,
             this
           );
-          var scene = document.querySelector("a-scene");
-
-          var camera_reference = scene.children[2]; //camera_reference
-
-          var faceStructureAux = {};
 
           initTwoFaceStructure();
 
+          var scene = document.querySelector("a-scene");
+          var camera_reference = scene.children[2];
+          var faceStructureAux = {};
           //This is made to make a deep copy from the faceStrucute object, including its THREE.Vector3() objects
           for (var face in faceStructure) {
             let listPosition = [];
@@ -63,28 +59,15 @@
           camera_reference.faceStructure = faceStructureAux;
 
           camera_reference.videoFrames = {};
-
-          // for (let i = 0; i < camera_reference.children.length; i++){
-          console.log("i video_0");
-
           let videoFrame = VideoFrame({
             id: "video_0",
             frameRate: FrameRates.high,
-            callback: function (response) {
-              console.log("callback response: " + response);
-            },
+            callback: function (response) {},
           });
           camera_reference.videoFrames["video_0"] = videoFrame;
-          // }
           console.log("camera_reference", camera_reference);
         },
-        tick: function (t, dt) {
-          // // Get Head Position
-          // var [cvp_x_radians, cvp_y_radians] = update_center_viewport();
-          // // Get Visible Faces
-          // var result = get_visible_faces(cvp_x_radians, cvp_y_radians);
-          // console.log("RESULT: ", result);
-        },
+        tick: function (t, dt) {},
       });
     </script>
     <style>
