@@ -30,13 +30,13 @@ plt.figure(figsize=(8, 6))
 plt.scatter(si_values, ti_values)
 
 # 设置图表标签和标题
-plt.xlabel('si (Average)')
-plt.ylabel('ti (Average)')
-plt.title('Scatter Plot of si vs ti for each video')
+plt.xlabel('SI')
+plt.ylabel('TI')
+plt.title('')
 
 # 标注每个点
 for i, label in enumerate(video_labels):
-    plt.annotate(label, (si_values[i], ti_values[i]), textcoords="offset points", xytext=(0,5), ha='center')
+    plt.annotate(label.split(".")[0], (si_values[i], ti_values[i]), textcoords="offset points", xytext=(0,5), ha='center')
 
 # 显示网格
 plt.grid(True)

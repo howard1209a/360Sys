@@ -36,15 +36,15 @@ plt.figure(figsize=(10, 6))
 
 # 为每个视频绘制单独的曲线
 for video in videos:
-    sorted_angles = np.sort(video_angle_differences[video])  # 排序
+    sorted_angles = np.sort(np.array(video_angle_differences[video]) * 60)  # 转为角分钟
     cdf = np.arange(1, len(sorted_angles) + 1) / len(sorted_angles)  # 计算累积分布
     plt.plot(sorted_angles, cdf, label=f"Video {video}", linestyle="-", alpha=0.7)  # 去掉 marker 只绘制线
 
 # 添加图例和标签
-plt.xlabel("视野偏移角度 (度)")
-plt.ylabel("累积分布函数 (CDF)")
-plt.title("不同视频的用户视野偏移角度 CDF 对比")
-plt.legend(title="视频", loc="lower right")
+plt.xlabel("Angular Velocity(°/s)")
+plt.ylabel("CDF")
+plt.title("")
+plt.legend(title="video type", loc="lower right")
 plt.grid(True)
 
 # 显示图形
