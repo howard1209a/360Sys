@@ -27,28 +27,24 @@ app.controller("DashController", [
     $scope.totalThroughput = 0; // 近期视频数据下载吞吐量，每秒更新一次
     $scope.totalDownloadTime = 0; // 近期下载单个视频的平均耗时，每秒更新一次
     $scope.playerBufferLength = []; // 全部播放器实时缓冲区长度
-    $scope.playerAverageThroughput = []; // ？
+    $scope.playerAverageThroughput = []; // 全部播放器实时网络吞吐量
 
     $scope.requestList = []; // 由dash内部注入，保存了全部播放器的http请求，按照请求结束下载时间从小到大排序
 
-    $scope.selectedItem = {
-      // 默认视频源
-      type: "json",
-      value: "https://localhost/360sys/client/json_config/video4_6*2*2.json",
-    };
-    $scope.optionButton = "展示选项";
+    $scope.selectedItem = {};
+    $scope.optionButton = "打开选项";
     $scope.selectedRule = "FOVRule";
 
-    $scope.requestDuration = 3000; // 计算吞吐量的区间长度
-    $scope.IntervalOfComputetotalThroughput = 1000; // 计算吞吐量的时间间隔
+    $scope.requestDuration = 3000; // 计算网络吞吐量的区间长度
+    $scope.IntervalOfComputetotalThroughput = 1000; // 计算网络吞吐量的时间间隔
 
-    $scope.playerBufferToKeep = 3; // 未知作用配置
+    $scope.playerBufferToKeep = 3; // 未知配置
     $scope.playerStableBufferTime = 3; // dash的buffer控制参数，参照https://ki8trbsdgd.feishu.cn/wiki/W5Jww02i3ijgz1kjQltcvYWUnlh?fromScene=spaceOverview
     $scope.playerBufferTimeAtTopQuality = 3; // dash的buffer控制参数，参照https://ki8trbsdgd.feishu.cn/wiki/W5Jww02i3ijgz1kjQltcvYWUnlh?fromScene=spaceOverview
     $scope.playerMinDrift = 0.02; // dash的buffer控制参数，参照https://ki8trbsdgd.feishu.cn/wiki/W5Jww02i3ijgz1kjQltcvYWUnlh?fromScene=spaceOverview
 
+    // 预设资源链接
     $scope.availableStreams = [
-      // 预设资源链接
       {
         name: "Drone Footage(2*2)",
         json: "https://localhost/360sys/client/json_config/video9_6*2*2.json",
@@ -99,14 +95,8 @@ app.controller("DashController", [
     $scope.frame_array = []; // 帧序号列表，长度为aframe摄像机的帧率
     $scope.current_center_viewport_x = 0; // 实时视野经度，值为-pi到pi
     $scope.current_center_viewport_y = 0; // 实时视野纬度，值为-pi到pi
-    $scope.user_tracking_viewport_x = 0; // 如果启动了用户视野轨迹模拟，则该变量记录实时的模拟经度
-    $scope.user_tracking_viewport_y = 0; // 如果启动了用户视野轨迹模拟，则该变量记录实时的模拟纬度
-    $scope.yaw = 0; // 同current_center_viewport_x
-    $scope.pitch = 0; // 同current_center_viewport_y
-    $scope.hasEditScheduledValue = false; // edit机制相关
-    $scope.editHappenedValue = false; // edit机制相关
-    $scope.radiansRotationValue = 0; // edit机制相关
-    $scope.editTypeValue = "null"; // edit机制相关
+    $scope.user_tracking_viewport_x = 0; // 如果启动了用户视野轨迹模拟，则该变量记录实时的模拟经度，值为-pi到pi
+    $scope.user_tracking_viewport_y = 0; // 如果启动了用户视野轨迹模拟，则该变量记录实时的模拟纬度，值为-pi到pi
 
     // 基于最近1s内的视野数据，使用线性回归/脊回归算法预测prediction_frame帧之后的用户视野角度，该方式只适用于短期预测
     $scope.predict_center_viewport = function (
@@ -302,13 +292,13 @@ app.controller("DashController", [
 
     // For setting up the ABR rule
     $scope.showoption = function () {
-      if ($scope.optionButton == "展示选项") {
+      if ($scope.optionButton == "打开选项") {
         document.getElementById("option").style =
           "background-color: #e2e1e4; z-index: 1000; position: absolute;";
-        $scope.optionButton = "隐藏选项";
+        $scope.optionButton = "收起选项";
       } else {
         document.getElementById("option").style = "display: none;";
-        $scope.optionButton = "展示选项";
+        $scope.optionButton = "打开选项";
       }
     };
 
@@ -569,13 +559,6 @@ app.controller("DashController", [
                   LowestBitrateRule
                 );
                 break;
-              case "FOVEditRule":
-                $scope.players[$scope.playerCount].addABRCustomRule(
-                  "qualitySwitchRules",
-                  "FOVEditRule",
-                  FOVEditRule
-                );
-                break;
               default:
                 $scope.players[$scope.playerCount].updateSettings({
                   streaming: {
@@ -618,17 +601,22 @@ app.controller("DashController", [
 
       // aframe每渲染一帧执行一次，设置标准时间为所有播放器最快时间
       requestAnimationFrame(setNormalizedTime);
-      // 每隔一段时间计算一次吞吐量
+
+      // 每隔1s计算一次吞吐量
       setInterval(
         computetotalThroughput,
         $scope.IntervalOfComputetotalThroughput
       );
+
       requestAnimationFrame(dynamicEditClass);
+
       // aframe每渲染一帧执行一次，更新用户视野
       requestAnimationFrame(update_center_viewport);
+
       // aframe每渲染一帧执行一次，启动用户视野角度轨迹模拟
       requestAnimationFrame(updateUserTracking);
-      // aframe每渲染一帧执行一次，更新输出csv文件
+
+      // 每隔1s记录日志
       setInterval(updateOutputFileInTime, 1000);
 
       initChart();
@@ -683,9 +671,17 @@ app.controller("DashController", [
     }
 
     function updateOutputFileInTime() {
+      // 先更新一些数据
       let numPlayer = $scope.players.length;
+      for (let i = 0; i < numPlayer; i++) {
+        $scope.playerBufferLength[i] = $scope.players[i].getBufferLength();
+        $scope.playerAverageThroughput[i] =
+          $scope.players[i].getAverageThroughput("video");
+      }
+
+      // 开始记录日志
       let stringListQuality = "[";
-      for (let i = 0; i < numPlayer - 1; i++)
+      for (let i = 0; i < numPlayer; i++)
         stringListQuality += $scope.players[i].getQualityFor("video") + ";";
       stringListQuality = stringListQuality.slice(
         0,

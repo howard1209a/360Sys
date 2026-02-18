@@ -116,7 +116,7 @@
               暂停
             </button>
             <div id="option" style="display: none">
-              <div class="options-item-title">ABR Strategy</div>
+              <div class="options-item-title">码率自适应算法</div>
               <div class="options-item-body">
                 <div class="sub-options-item-body">
                   <label data-toggle="tooltip" data-placement="right">
@@ -150,11 +150,9 @@
                 </div>
               </div>
 
-              <!-- 新增的选项区域 -->
               <div class="options-item-title">User Tracking</div>
               <div class="options-item-body">
                 <div class="sub-options-item-body">
-                  <!-- 启动用户轨迹的选项 -->
                   <label data-toggle="tooltip" data-placement="right">
                     <input
                       id="userTrackingToggle"
@@ -162,10 +160,9 @@
                       autocomplete="off"
                       ng-model="userTrackingToggle"
                     />
-                    Enable User Tracking
+                    开启视野轨迹模拟
                   </label>
 
-                  <!-- 数字输入框：视频选择 -->
                   <label data-toggle="tooltip" data-placement="right">
                     <input
                       id="videoIndex"
@@ -176,10 +173,9 @@
                       ng-model="videoIndex"
                       placeholder="Enter video index"
                     />
-                    Video Index
+                    视频编号
                   </label>
 
-                  <!-- 数字输入框：用户选择 -->
                   <label data-toggle="tooltip" data-placement="right">
                     <input
                       id="userTrackingIndex"
@@ -190,7 +186,7 @@
                       ng-model="userTrackingIndex"
                       placeholder="Enter user index"
                     />
-                    User Tracking Index
+                    用户编号
                   </label>
                 </div>
               </div>
@@ -216,20 +212,20 @@
             onload="this.width=1000; this.height=500"
           ></iframe>
         </div>
+
+        <!-- 实时系统信息栏 -->
         <div
           class="tabs-section"
           style="width: calc(100% - 1050px); float: left; margin-left: 20px"
         >
-          <!-- Tab panes -->
           <div class="tab-content">
             <div class="panel-body panel-stats" ng-cloak>
-              <!-- VIDEO STATS ITEMS-->
               <div class="text-success">
                 <label
                   class="text-primary"
                   data-toggle="tooltip"
                   data-placement="top"
-                  >Normalized Time :
+                  >时间戳 :
                 </label>
                 {{normalizedTime.toFixed(2)}} s
               </div>
@@ -239,39 +235,19 @@
                   class="text-primary"
                   data-toggle="tooltip"
                   data-placement="top"
-                  >Total Throughput :
+                  >网络吞吐量 :
                 </label>
                 {{totalThroughput >= 8000000 ? (totalThroughput /
                 8000000).toFixed(2) : (totalThroughput / 8000).toFixed(0)}}
                 {{totalThroughput >= 8000000 ? " MB/s" : " kB/s"}}
-              </div>
-
-              <div class="text-success">
-                <label
-                  class="text-primary"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                >
-                  CPU Usage:
-                </label>
-              </div>
-
-              <div class="text-success">
-                <label
-                  class="text-primary"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                >
-                  Energy Consumption:
-                </label>
               </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- 实时系统效果图 -->
       <div id="clientInfo">
-        <!-- 显示动态折线图的区域 -->
         <div id="charts">
           <div class="chart-container">
             <canvas id="throughputChart"></canvas>
@@ -282,19 +258,5 @@
         </div>
       </div>
     </div>
-
-    <script>
-      // 下载按钮功能
-      function downloadFile() {
-        const content = "这里是文件的内容"; // 替换为你想要下载的内容
-        const blob = new Blob([content], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "download.txt"; // 设置下载文件的名称
-        link.click();
-        URL.revokeObjectURL(url);
-      }
-    </script>
   </body>
 </html>
