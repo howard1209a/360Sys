@@ -117,3 +117,5 @@ Gemfile.lock
 *.bak
 *.orig
 *.old
+.DS_Store
+server/.DS_Store

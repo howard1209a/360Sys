@@ -22,11 +22,11 @@ fi
 
 echo "开始裁剪视频 ${video_file}..."
 
-ffmpeg -i "${base_dir}$video_file" -vf "crop=480:480:0:0" -c:v libx264 -crf 18 -preset faster -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile1.mp4"
-ffmpeg -i "${base_dir}$video_file" -vf "crop=480:480:480:0" -c:v libx264 -crf 18 -preset faster -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile2.mp4"
-ffmpeg -i "${base_dir}$video_file" -vf "crop=480:480:960:0" -c:v libx264 -crf 18 -preset faster -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile3.mp4"
-ffmpeg -i "${base_dir}$video_file" -vf "crop=480:480:0:480" -c:v libx264 -crf 18 -preset faster -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile4.mp4"
-ffmpeg -i "${base_dir}$video_file" -vf "crop=480:480:480:480" -c:v libx264 -crf 18 -preset faster -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile5.mp4"
-ffmpeg -i "${base_dir}$video_file" -vf "crop=480:480:960:480" -c:v libx264 -crf 18 -preset faster -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile6.mp4"
+ffmpeg -i "${base_dir}$video_file" -vf "crop=960:960:0:0" -c:v libx264 -crf 14 -preset slower -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile1.mp4"
+ffmpeg -i "${base_dir}$video_file" -vf "crop=960:960:960:0" -c:v libx264 -crf 14 -preset slower -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile2.mp4"
+ffmpeg -i "${base_dir}$video_file" -vf "crop=960:960:1920:0" -c:v libx264 -crf 14 -preset slower -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile3.mp4"
+ffmpeg -i "${base_dir}$video_file" -vf "crop=960:960:0:960" -c:v libx264 -crf 14 -preset slower -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile4.mp4"
+ffmpeg -i "${base_dir}$video_file" -vf "crop=960:960:960:960" -c:v libx264 -crf 14 -preset slower -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile5.mp4"
+ffmpeg -i "${base_dir}$video_file" -vf "crop=960:960:1920:960" -c:v libx264 -crf 14 -preset slower -c:a copy "${base_dir}video${video_num}/tile/1*1/video_${video_num}_tile6.mp4"
 
 echo "裁剪完成！"
