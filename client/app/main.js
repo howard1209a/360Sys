@@ -223,31 +223,6 @@ app.controller("DashController", [
         }
         cameraAux.updateProjectionMatrix();
 
-        var frustum = new THREE.Frustum();
-
-        // Make a frustum to know what is in the camera vision
-        frustum.setFromProjectionMatrix(
-          new THREE.Matrix4().multiplyMatrices(
-            camera.projectionMatrix,
-            camera.matrixWorldInverse
-          )
-        );
-
-        // Uses the faceStructureModified value because it could have an edit on the playback
-        for (var face in faceStructureModified) {
-          let countPointsVisible = 0;
-          let numberPoints = faceStructureModified[face].length;
-          for (var position = 0; position < numberPoints; position++)
-            if (frustum.containsPoint(faceStructureModified[face][position]))
-              countPointsVisible++;
-
-          if (countPointsVisible > 0) {
-            let numberTruncaded =
-              Math.floor((countPointsVisible / numberPoints) * 1000) / 1000;
-            visibleObjects[face] = numberTruncaded;
-          }
-        }
-
         // Use quaternion to simulate the camera rotation
         // It was noticed that the camera object does not change its quaternion value after the render process.
         // With that in mind, the simulation is done by rotating the camera to the given center of the viewport
@@ -275,9 +250,9 @@ app.controller("DashController", [
         cameraAux.updateMatrixWorld();
 
         // Make a new frustum to know what is in the camera vision simulation
-        var frustum2 = new THREE.Frustum();
+        var frustum = new THREE.Frustum();
 
-        frustum2.setFromProjectionMatrix(
+        frustum.setFromProjectionMatrix(
           new THREE.Matrix4().multiplyMatrices(
             cameraAux.projectionMatrix,
             cameraAux.matrixWorldInverse
@@ -291,12 +266,12 @@ app.controller("DashController", [
           let countPointsVisible = 0;
           let numberPoints = faceStructure[face].length;
           for (var position = 0; position < numberPoints; position++)
-            if (frustum2.containsPoint(faceStructure[face][position]))
+            if (frustum.containsPoint(faceStructure[face][position]))
               countPointsVisible++;
-
           if (countPointsVisible > 0) {
             let numberTruncaded =
-              Math.floor((countPointsVisible / numberPoints) * 1000) / 1000;
+              Math.floor(((countPointsVisible * 1.0) / numberPoints) * 1000) /
+              1000;
             visibleObjects[face] = numberTruncaded;
           }
         }
@@ -654,21 +629,13 @@ app.controller("DashController", [
       // aframe每渲染一帧执行一次，启动用户视野角度轨迹模拟
       requestAnimationFrame(updateUserTracking);
       // aframe每渲染一帧执行一次，更新输出csv文件
-      // requestAnimationFrame(updateOutputFileInFrame);
       setInterval(updateOutputFileInTime, 1000);
-      setInterval(logTime, 1000);
 
       initChart();
 
       document.getElementById("Load").style = "display: none;";
       document.getElementById("Play").style = "display: inline;";
     };
-
-    function logTime() {
-      // for (var i = 0; i < 6; i++) {
-      //   console.log("player" + i + " time:" + $scope.players[i].time());
-      // }
-    }
 
     function loadUserTracking() {
       // 如果开启了用户视野轨迹模拟，且传入了视频索引和用户索引
@@ -720,7 +687,6 @@ app.controller("DashController", [
       let stringListQuality = "[";
       for (let i = 0; i < numPlayer - 1; i++)
         stringListQuality += $scope.players[i].getQualityFor("video") + ";";
-
       stringListQuality = stringListQuality.slice(
         0,
         stringListQuality.length - 1
@@ -768,68 +734,6 @@ app.controller("DashController", [
       };
 
       $scope.json_output.push(frame_data);
-    }
-
-    // 更新输出指标;
-    function updateOutputFileInFrame() {
-      let numPlayer = $scope.players.length;
-      let stringListQuality = "[";
-      let predicted_visible_faces = $scope.get_visible_faces(
-        $scope.yaw,
-        $scope.pitch,
-        false
-      );
-      for (let i = 0; i < numPlayer - 1; i++)
-        stringListQuality += $scope.players[i].getQualityFor("video") + ";";
-
-      stringListQuality = stringListQuality.slice(
-        0,
-        stringListQuality.length - 1
-      );
-      stringListQuality += "]";
-
-      visibleFaces = "[";
-      percentageVisibleFaces = "[";
-      for (face in predicted_visible_faces) {
-        visibleFaces += face.slice(-1) + ";";
-        percentageVisibleFaces += predicted_visible_faces[face] + ";";
-      }
-
-      visibleFaces = visibleFaces.slice(0, visibleFaces.length - 1);
-      visibleFaces += "]";
-
-      percentageVisibleFaces = percentageVisibleFaces.slice(
-        0,
-        percentageVisibleFaces.length - 1
-      );
-      percentageVisibleFaces += "]";
-
-      let frame_data = {
-        frame: $scope.frameNumber != 0 ? $scope.frameNumber.get() : 0,
-        totalThroughput: $scope.totalThroughput,
-        listQuality: stringListQuality,
-        visibleFaces: visibleFaces,
-        percentageVisibleFaces: percentageVisibleFaces,
-        yaw: Number.parseFloat($scope.yaw).toFixed(4),
-        pitch: Number.parseFloat($scope.pitch).toFixed(4),
-        hasEditScheduled: $scope.hasEditScheduledValue,
-        editHappened: $scope.editHappenedValue,
-        radiansRotation: Number.parseFloat($scope.radiansRotationValue).toFixed(
-          4
-        ),
-        editType: $scope.editTypeValue,
-      };
-
-      $scope.json_output.push(frame_data);
-
-      if ($scope.editTypeValue === "instant") {
-        $scope.editTypeValue = "null";
-        $scope.radiansRotationValue = 0;
-        $scope.hasEditScheduledValue = false;
-        $scope.editHappenedValue = false;
-      }
-
-      requestAnimationFrame(updateOutputFile);
     }
 
     function setNormalizedTime() {
@@ -912,8 +816,8 @@ app.controller("DashController", [
         TotalTimeInAnInterval -=
           requestTimeIndex - (curTime - $scope.requestDuration);
       }
-      // 这里强制将分母区间设置为3000
-      TotalTimeInAnInterval = 3000;
+      // // 这里强制将分母区间设置为3000
+      // TotalTimeInAnInterval = 3000;
       if (TotalDataInAnInterval != 0 && TotalTimeInAnInterval != 0) {
         $scope.totalThroughput = Math.round(
           (8 * TotalDataInAnInterval) / (TotalTimeInAnInterval / 1000)

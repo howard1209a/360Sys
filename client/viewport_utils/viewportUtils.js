@@ -33,30 +33,18 @@ function update_center_viewport() {
     sphere_mesh.raycast(newRaycaster, intersection);
 
     if (intersection.length > 0) {
-      // console.log(intersection);
       var cvp_x_norm = intersection[0].uv.x;
       var cvp_y_norm = intersection[0].uv.y;
-
-      //values from -180° through +180°
-      var cvp_x_degree = convert_normalized_to_degree(cvp_x_norm);
-      var cvp_y_degree = convert_normalized_to_degree(cvp_y_norm);
 
       //values from -PI through +PI
       var cvp_x_radians = convert_normalized_to_radians(cvp_x_norm);
       var cvp_y_radians = convert_normalized_to_radians(cvp_y_norm);
 
-      // fulfill the sky object with the Head Movement data
-      sky_sphere["head_movement_degree"] = [cvp_x_degree, cvp_y_degree];
-      sky_sphere["head_movement_radians"] = [cvp_x_radians, cvp_y_radians];
-
       var frameObj = document.getElementById("frame");
-      // console.log("frameObj", frameObj)
       if (frameObj) {
         var appElement = document.querySelector(
           "[ng-controller=DashController]"
         );
-        // console.log("appElement",appElement);
-        // console.log("angular.element(appElement).scope()", angular.element(appElement).scope())
         var $scope = angular.element(appElement).scope();
         if (!$scope.frameNumber) {
           requestAnimationFrame(update_center_viewport);
@@ -87,10 +75,7 @@ function update_center_viewport() {
         $scope.current_center_viewport_x = cvp_x_radians;
         $scope.current_center_viewport_y = cvp_y_radians;
 
-        // console.log([cvp_x_radians,cvp_y_radians])
-
         $scope.frame_array = frame_array;
-        //console.log("VIEWPORT center_viewport_x", center_viewport_x)
       }
 
       requestAnimationFrame(update_center_viewport);

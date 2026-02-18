@@ -78,32 +78,6 @@ function initChart() {
     }
   );
 
-  // 初始化能耗图表
-  energyChart = new Chart(
-    document.getElementById("energyChart").getContext("2d"),
-    {
-      type: "line",
-      data: {
-        labels: [],
-        datasets: [
-          {
-            label: "Energy Consumption (W)",
-            borderColor: "red",
-            fill: false,
-            data: [],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: { beginAtZero: true },
-          y: { beginAtZero: true },
-        },
-      },
-    }
-  );
-
   // 启动定时器定期更新图表数据
   setInterval(updateClientStats, 1000);
 }
@@ -112,9 +86,6 @@ function initChart() {
 function updateClientStats() {
   var appElement = document.querySelector("[ng-controller=DashController]");
   var $scope = angular.element(appElement).scope();
-
-  // 模拟数据更新（实际应用中可以根据需要获取真实数据）
-  const currentEnergyUsage = Math.random() * 10 + 20; // 模拟能耗
 
   // 更新折线图数据
   throughputData.push(($scope.totalThroughput / 8000000).toFixed(2));
@@ -155,9 +126,4 @@ function updateCharts() {
     bitrateSelectChart.data.datasets[i].data = bitrateSelectData[i].slice();
   }
   bitrateSelectChart.update();
-
-  //   // 能耗图表
-  //   energyChart.data.labels = labels;
-  //   energyChart.data.datasets[0].data = energyUsageData;
-  //   energyChart.update();
 }
