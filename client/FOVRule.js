@@ -57,7 +57,8 @@ function FOVRuleClass() {
       visible_faces_one_second = $scope.get_visible_faces(
         center_viewport_x,
         center_viewport_y,
-        true
+        true,
+        120
       );
       for (k in visible_faces_one_second) {
         visible_faces[k] = visible_faces_one_second[k];

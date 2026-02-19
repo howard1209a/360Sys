@@ -139,12 +139,42 @@
                   </label>
                   <label data-toggle="tooltip" data-placement="right">
                     <input
+                      id="VaserRule"
+                      type="radio"
+                      autocomplete="off"
+                      ng-click="changeABRStrategy('VaserRule')"
+                      checked="checked"
+                    />
+                    Vaser算法
+                  </label>
+                  <label data-toggle="tooltip" data-placement="right">
+                    <input
+                      id="VAACRule"
+                      type="radio"
+                      autocomplete="off"
+                      ng-click="changeABRStrategy('VAACRule')"
+                      checked="checked"
+                    />
+                    VAAC算法
+                  </label>
+                  <label data-toggle="tooltip" data-placement="right">
+                    <input
+                      id="VAACERule"
+                      type="radio"
+                      autocomplete="off"
+                      ng-click="changeABRStrategy('VAACERule')"
+                      checked="checked"
+                    />
+                    VAAC-E算法
+                  </label>
+                  <label data-toggle="tooltip" data-placement="right">
+                    <input
                       id="HighestBitrateRule"
                       type="radio"
                       autocomplete="off"
                       ng-click="changeABRStrategy('HighestBitrateRule')"
                     />
-                    HighestBitrateRule
+                    全高清算法
                   </label>
                   <label data-toggle="tooltip" data-placement="right">
                     <input
@@ -153,7 +183,7 @@
                       autocomplete="off"
                       ng-click="changeABRStrategy('LowestBitrateRule')"
                     />
-                    LowestBitrateRule
+                    全低清算法
                   </label>
                 </div>
               </div>

@@ -94,13 +94,40 @@ app.controller("DashController", [
         json: "https://localhost/360sys/client/json_config/video10_6*1*1.json",
       },
       {
+        name: "Drone Footage直播(24瓦片)",
+        json: "https://localhost/360sys/client/json_config/video10_6*1*1_live.json",
+      },
+      {
+        name: "Hog Rider直播(24瓦片)",
+        json: "https://localhost/360sys/client/json_config/video10_6*1*1_live.json",
+      },
+      {
+        name: "Pig Life Animation直播(24瓦片)",
+        json: "https://localhost/360sys/client/json_config/video10_6*1*1_live.json",
+      },
+      {
+        name: "Roller Coaster直播(24瓦片)",
+        json: "https://localhost/360sys/client/json_config/video10_6*1*1_live.json",
+      },
+      {
+        name: "Super Mario直播(24瓦片)",
+        json: "https://localhost/360sys/client/json_config/video10_6*1*1_live.json",
+      },
+      {
         name: "Cooking Battle直播(24瓦片)",
         json: "https://localhost/360sys/client/json_config/video10_6*1*1_live.json",
       },
     ];
 
     // abr策略列表
-    $scope.rules = ["FOVRule", "HighestBitrateRule", "LowestBitrateRule"];
+    $scope.rules = [
+      "FOVRule",
+      "HighestBitrateRule",
+      "LowestBitrateRule",
+      "VaserRule",
+      "VAACRule",
+      "VAACERule",
+    ];
 
     $scope.center_viewport_x = []; // 视野经度列表，值为-pi到pi，实际范围360度，长度为aframe摄像机的帧率
     $scope.center_viewport_y = []; // 视野纬度列表，值为-pi到pi，实际范围180度，长度为aframe摄像机的帧率
@@ -204,7 +231,8 @@ app.controller("DashController", [
     $scope.get_visible_faces = function (
       cvp_x_radians,
       cvp_y_radians,
-      isDynamicFov
+      isDynamicFov,
+      fov
     ) {
       var frameObj = document.getElementById("frame");
       var scene = frameObj.contentWindow.document.querySelector("a-scene");
@@ -221,7 +249,7 @@ app.controller("DashController", [
         var cameraAux = camera.clone();
         if (isDynamicFov) {
           // 调整视域大小，我们只会在abr决策查看视野时变换视域
-          cameraAux.fov = 120;
+          cameraAux.fov = fov;
         }
         cameraAux.updateProjectionMatrix();
 
@@ -565,6 +593,27 @@ app.controller("DashController", [
                   FOVRule
                 );
                 break;
+              case "VaserRule":
+                $scope.players[$scope.playerCount].addABRCustomRule(
+                  "qualitySwitchRules",
+                  "VaserRule",
+                  VaserRule
+                );
+                break;
+              case "VAACRule":
+                $scope.players[$scope.playerCount].addABRCustomRule(
+                  "qualitySwitchRules",
+                  "VAACRule",
+                  VAACRule
+                );
+                break;
+              case "VAACERule":
+                $scope.players[$scope.playerCount].addABRCustomRule(
+                  "qualitySwitchRules",
+                  "VAACERule",
+                  VAACERule
+                );
+                break;
               case "HighestBitrateRule":
                 $scope.players[$scope.playerCount].addABRCustomRule(
                   "qualitySwitchRules",
@@ -714,7 +763,8 @@ app.controller("DashController", [
       let current_visible_faces = $scope.get_visible_faces(
         $scope.current_center_viewport_x,
         $scope.current_center_viewport_y,
-        false
+        false,
+        -1
       );
       for (face in current_visible_faces) {
         visibleFaces += face + ";";
