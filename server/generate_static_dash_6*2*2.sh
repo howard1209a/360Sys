@@ -21,8 +21,9 @@ do
     input_tile_video="${base_dir}video${video_num}/tile/2*2/video_${video_num}_tile${i}_${j}.mp4"
     ffmpeg -hide_banner -loglevel error \
     -i "${input_tile_video}" \
-    -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -crf:v:0 18 -g 25 \
-    -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -crf:v:1 51 -g 25 \
+    -map 0:v:0 -c:v:0 libx264 -profile:v:0 main -crf:v:0 14 -g 25 \
+    -map 0:v:0 -c:v:1 libx264 -profile:v:1 main -crf:v:1 28 -g 25 \
+    -map 0:v:0 -c:v:2 libx264 -profile:v:2 main -crf:v:2 51 -g 25 \
     -f dash \
     -segment_time 1 \
     -segment_list "$OUTPUT/stream.m3u8" \

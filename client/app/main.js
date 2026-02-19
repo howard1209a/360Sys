@@ -46,44 +46,56 @@ app.controller("DashController", [
     // 预设资源链接
     $scope.availableStreams = [
       {
-        name: "Drone Footage(2*2)",
+        name: "Drone Footage点播(24瓦片)",
         json: "https://localhost/360sys/client/json_config/video9_6*2*2.json",
       },
       {
-        name: "Hog Rider(2*2)",
+        name: "Hog Rider点播(24瓦片)",
         json: "https://localhost/360sys/client/json_config/video2_6*2*2.json",
       },
       {
-        name: "Pig Life Animation(2*2)",
+        name: "Pig Life Animation点播(24瓦片)",
         json: "https://localhost/360sys/client/json_config/video8_6*2*2.json",
       },
       {
-        name: "Roller Coaster(2*2)",
+        name: "Roller Coaster点播(24瓦片)",
         json: "https://localhost/360sys/client/json_config/video5_6*2*2.json",
       },
       {
-        name: "Super Mario(2*2)",
+        name: "Super Mario点播(24瓦片)",
         json: "https://localhost/360sys/client/json_config/video4_6*2*2.json",
       },
       {
-        name: "Drone Footage(1*1)",
+        name: "Cooking Battle点播(24瓦片)",
+        json: "https://localhost/360sys/client/json_config/video10_6*2*2.json",
+      },
+      {
+        name: "Drone Footage点播(6瓦片)",
         json: "https://localhost/360sys/client/json_config/video9_6*1*1.json",
       },
       {
-        name: "Hog Rider(1*1)",
+        name: "Hog Rider点播(6瓦片)",
         json: "https://localhost/360sys/client/json_config/video2_6*1*1.json",
       },
       {
-        name: "Pig Life Animation(1*1)",
+        name: "Pig Life Animation点播(6瓦片)",
         json: "https://localhost/360sys/client/json_config/video8_6*1*1.json",
       },
       {
-        name: "Roller Coaster(1*1)",
+        name: "Roller Coaster点播(6瓦片)",
         json: "https://localhost/360sys/client/json_config/video5_6*1*1.json",
       },
       {
-        name: "Super Mario(1*1)",
+        name: "Super Mario点播(6瓦片)",
         json: "https://localhost/360sys/client/json_config/video4_6*1*1.json",
+      },
+      {
+        name: "Cooking Battle点播(6瓦片)",
+        json: "https://localhost/360sys/client/json_config/video10_6*1*1.json",
+      },
+      {
+        name: "Cooking Battle直播(24瓦片)",
+        json: "https://localhost/360sys/client/json_config/video10_6*1*1_live.json",
       },
     ];
 
@@ -419,6 +431,14 @@ app.controller("DashController", [
         $scope.play_all();
       }
     }
+
+    // 刷新到0时间戳
+    function refresh() {
+      for (let i = 0; i < $scope.players.length; i++) {
+        $scope.players[i].seek(10);
+      }
+    }
+    $scope.refresh = refresh;
 
     // 下载csv日志文件
     function download_csv() {
