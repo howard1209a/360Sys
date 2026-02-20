@@ -11,6 +11,20 @@
         min-width: 1000px;
         overflow-x: hidden;
       }
+      #charts {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+        width: 100%;
+      }
+
+      .chart-container {
+        width: 70%;
+        background: white;
+        border-radius: 4px;
+        padding: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
     </style>
   </head>
 
@@ -299,10 +313,10 @@
                   class="text-primary"
                   data-toggle="tooltip"
                   data-placement="top"
-                  >实时视野角度X :
+                  >水平视野角度X :
                 </label>
                 {{(current_center_viewport_x * 180 / 3.1415926
-                +180).toFixed(2)}} °
+                +180).toFixed(0)}} °
               </div>
 
               <div class="text-success">
@@ -310,9 +324,9 @@
                   class="text-primary"
                   data-toggle="tooltip"
                   data-placement="top"
-                  >实时视野角度Y :
+                  >垂直视野角度Y :
                 </label>
-                {{(current_center_viewport_y * 90 / 3.1415926 + 90).toFixed(2)}}
+                {{(current_center_viewport_y * 90 / 3.1415926 + 90).toFixed(0)}}
                 °
               </div>
 
@@ -377,9 +391,7 @@
                   data-placement="top"
                   >视野内画面比特率 :
                 </label>
-                {{bitrate_in_view >= 8000000 ? (bitrate_in_view /
-                8000000).toFixed(2) : (bitrate_in_view / 8000).toFixed(0)}}
-                {{bitrate_in_view >= 8000000 ? " MB/s" : " KB/s"}}
+                {{(bitrate_in_view/1000).toFixed(0)}} kbps
               </div>
             </div>
           </div>
@@ -390,10 +402,25 @@
       <div id="clientInfo">
         <div id="charts">
           <div class="chart-container">
-            <canvas id="throughputChart"></canvas>
+            <canvas id="totalThroughputChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="totalBandwidthChart"></canvas>
           </div>
           <div class="chart-container">
             <canvas id="bitrateSelectChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="bufferLengthChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="viewChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="lowQualityChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="viewBitrateChart"></canvas>
           </div>
         </div>
       </div>
