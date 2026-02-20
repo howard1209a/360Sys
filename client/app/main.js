@@ -27,7 +27,7 @@ app.controller("DashController", [
     $scope.totalThroughput = 0; // 近期视频数据下载总吞吐速率，每秒更新一次，单位bps
     $scope.totalBandwidth = 0; // 根据视频下载估计出的网络带宽，每秒更新一次，单位bps
     $scope.totalDownloadTime = 0; // 近期下载单个视频的平均耗时，每秒更新一次
-    $scope.playerBufferLength = []; // 全部播放器实时缓冲区长度
+    $scope.playerBufferLength = []; // 全部播放器实时缓冲区长度，单位s
     $scope.playerAverageThroughput = []; // 全部播放器实时网络吞吐量
 
     $scope.low_quality_ratio = 0; // 视野内低质量区域比例，每秒更新一次
@@ -829,6 +829,12 @@ app.controller("DashController", [
         yaw: Number.parseFloat($scope.current_center_viewport_x).toFixed(4),
         // 实时视野维度，值为-pi到pi
         pitch: Number.parseFloat($scope.current_center_viewport_y).toFixed(4),
+        // 视野内低质量区域比例
+        lowQualityRatio: $scope.low_quality_ratio,
+        // 视野内比特率
+        bitrateInView: $scope.bitrate_in_view,
+        // 是否卡顿
+        isReBuffer: $scope.players[0].isPaused() ? true : false,
       };
 
       $scope.json_output.push(frame_data);

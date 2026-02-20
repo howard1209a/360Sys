@@ -1,0 +1,7 @@
+各项指标统计：
+algorithm  low_quality_ratio_mean  bitrate_in_view_mean  rebuffer_count  total_rows
+       PW                  0.1787          1427493.4398              22         171
+   VAAC-E                  0.1219          4501449.1043              62         171
+     VAAC                  0.1740          4172587.2458              49         171
+  SPB-360                  0.1701          4203819.0725              50         171
+    Vaser                  0.0000          5110936.9305              75         171

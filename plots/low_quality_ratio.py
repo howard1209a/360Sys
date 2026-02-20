@@ -4,7 +4,6 @@ from matplotlib import rcParams
 
 plt.rcParams["font.family"] = ["Times New Roman", "SimSun"]
 
-
 def format_draw_histogram(
         labels,
         data,
@@ -44,10 +43,10 @@ def format_draw_histogram(
 
 
 if __name__ == "__main__":
-    labels = ['SPB-360', 'Vaser', 'VAAC', 'VAAC-E', 'PW', 'BCD']
-    data = [0.19, 0.0, 0.39, 0.30, 0.25, 0.38]
-    colors = ['#B24475', '#864CBC', '#386688', '#845D1C', '#8A543C', '#3D7747']
-    hatch_patterns = ['x', 'o', '/', '+', '\\', '//']
+    labels = ['SPB-360', 'Vaser', 'VAAC', 'VAAC-E', 'PW']
+    data = [0.17, 0, 0.184, 0.121, 0.178]
+    colors = ['#B24475', '#864CBC', '#386688', '#845D1C', '#8A543C']
+    hatch_patterns = ['x', 'o', '/', '+', '\\']
 
     format_draw_histogram(
         labels=labels,
