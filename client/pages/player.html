@@ -125,25 +125,14 @@
             </button>
             <div id="option" style="display: none">
               <div class="options-item-title">码率自适应算法</div>
-              <div class="options-item-body">
+              <div class="options-item-body" style="height: 170px">
                 <div class="sub-options-item-body">
-                  <label data-toggle="tooltip" data-placement="right">
-                    <input
-                      id="FOVRule"
-                      type="radio"
-                      autocomplete="off"
-                      ng-click="changeABRStrategy('FOVRule')"
-                      checked="checked"
-                    />
-                    FOVRule
-                  </label>
                   <label data-toggle="tooltip" data-placement="right">
                     <input
                       id="VaserRule"
                       type="radio"
                       autocomplete="off"
                       ng-click="changeABRStrategy('VaserRule')"
-                      checked="checked"
                     />
                     Vaser算法
                   </label>
@@ -153,7 +142,6 @@
                       type="radio"
                       autocomplete="off"
                       ng-click="changeABRStrategy('VAACRule')"
-                      checked="checked"
                     />
                     VAAC算法
                   </label>
@@ -163,9 +151,27 @@
                       type="radio"
                       autocomplete="off"
                       ng-click="changeABRStrategy('VAACERule')"
-                      checked="checked"
                     />
                     VAAC-E算法
+                  </label>
+                  <label data-toggle="tooltip" data-placement="right">
+                    <input
+                      id="PWRule"
+                      type="radio"
+                      autocomplete="off"
+                      ng-click="changeABRStrategy('PWRule')"
+                    />
+                    PW算法
+                  </label>
+                  <label data-toggle="tooltip" data-placement="right">
+                    <input
+                      id="SPB360Rule"
+                      type="radio"
+                      autocomplete="off"
+                      ng-click="changeABRStrategy('SPB360Rule')"
+                      checked="checked"
+                    />
+                    SPB-360算法
                   </label>
                   <label data-toggle="tooltip" data-placement="right">
                     <input
@@ -188,8 +194,8 @@
                 </div>
               </div>
 
-              <div class="options-item-title">User Tracking</div>
-              <div class="options-item-body">
+              <div class="options-item-title">用户视野轨迹模拟</div>
+              <div class="options-item-body" style="height: 100px">
                 <div class="sub-options-item-body">
                   <label data-toggle="tooltip" data-placement="right">
                     <input
@@ -273,11 +279,85 @@
                   class="text-primary"
                   data-toggle="tooltip"
                   data-placement="top"
-                  >网络吞吐量 :
+                  >瓦片数 :
+                </label>
+                {{playerCount}}
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >帧率 :
+                </label>
+                {{videoFrameRate}} fps
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >实时视野角度X :
+                </label>
+                {{(current_center_viewport_x * 180 / 3.1415926
+                +180).toFixed(2)}} °
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >实时视野角度Y :
+                </label>
+                {{(current_center_viewport_y * 90 / 3.1415926 + 90).toFixed(2)}}
+                °
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >缓冲区长度 :
+                </label>
+                {{playerBufferLength[0].toFixed(2)}} s
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >网络吞吐速率 :
                 </label>
                 {{totalThroughput >= 8000000 ? (totalThroughput /
                 8000000).toFixed(2) : (totalThroughput / 8000).toFixed(0)}}
-                {{totalThroughput >= 8000000 ? " MB/s" : " kB/s"}}
+                {{totalThroughput >= 8000000 ? " MB/s" : " KB/s"}}
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >网络带宽速率 :
+                </label>
+                {{totalBandwidth >= 8000000 ? (totalBandwidth /
+                8000000).toFixed(2) : (totalBandwidth / 8000).toFixed(0)}}
+                {{totalBandwidth >= 8000000 ? " MB/s" : " KB/s"}}
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >平均瓦片下载耗时 :
+                </label>
+                {{totalDownloadTime.toFixed(2)}} s
               </div>
             </div>
           </div>

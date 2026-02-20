@@ -24,7 +24,8 @@ app.controller("DashController", [
     $scope.json_output = []; // 输出文件信息
 
     $scope.normalizedTime = 0; // 设置所有播放器最新的时间为标准时间
-    $scope.totalThroughput = 0; // 近期视频数据下载吞吐量，每秒更新一次
+    $scope.totalThroughput = 0; // 近期视频数据下载总吞吐速率，每秒更新一次，单位bps
+    $scope.totalBandwidth = 0; // 根据视频下载估计出的网络带宽，每秒更新一次，单位bps
     $scope.totalDownloadTime = 0; // 近期下载单个视频的平均耗时，每秒更新一次
     $scope.playerBufferLength = []; // 全部播放器实时缓冲区长度
     $scope.playerAverageThroughput = []; // 全部播放器实时网络吞吐量
@@ -33,7 +34,7 @@ app.controller("DashController", [
 
     $scope.selectedItem = {};
     $scope.optionButton = "打开选项";
-    $scope.selectedRule = "FOVRule";
+    $scope.selectedRule = "SPB360Rule";
 
     $scope.requestDuration = 3000; // 计算网络吞吐量的区间长度
     $scope.IntervalOfComputetotalThroughput = 1000; // 计算网络吞吐量的时间间隔
@@ -121,12 +122,13 @@ app.controller("DashController", [
 
     // abr策略列表
     $scope.rules = [
-      "FOVRule",
       "HighestBitrateRule",
       "LowestBitrateRule",
       "VaserRule",
       "VAACRule",
       "VAACERule",
+      "PWRule",
+      "SPB360Rule",
     ];
 
     $scope.center_viewport_x = []; // 视野经度列表，值为-pi到pi，实际范围360度，长度为aframe摄像机的帧率
@@ -586,13 +588,6 @@ app.controller("DashController", [
 
             // 添加自定义abr算法
             switch ($scope.selectedRule) {
-              case "FOVRule":
-                $scope.players[$scope.playerCount].addABRCustomRule(
-                  "qualitySwitchRules",
-                  "FOVRule",
-                  FOVRule
-                );
-                break;
               case "VaserRule":
                 $scope.players[$scope.playerCount].addABRCustomRule(
                   "qualitySwitchRules",
@@ -612,6 +607,20 @@ app.controller("DashController", [
                   "qualitySwitchRules",
                   "VAACERule",
                   VAACERule
+                );
+                break;
+              case "PWRule":
+                $scope.players[$scope.playerCount].addABRCustomRule(
+                  "qualitySwitchRules",
+                  "PWRule",
+                  PWRule
+                );
+                break;
+              case "SPB360Rule":
+                $scope.players[$scope.playerCount].addABRCustomRule(
+                  "qualitySwitchRules",
+                  "SPB360Rule",
+                  SPB360Rule
                 );
                 break;
               case "HighestBitrateRule":
@@ -882,12 +891,16 @@ app.controller("DashController", [
         TotalTimeInAnInterval -=
           requestTimeIndex - (curTime - $scope.requestDuration);
       }
-      // // 这里强制将分母区间设置为3000
-      // TotalTimeInAnInterval = 3000;
+
       if (TotalDataInAnInterval != 0 && TotalTimeInAnInterval != 0) {
         $scope.totalThroughput = Math.round(
+          (8 * TotalDataInAnInterval) / (3000 / 1000)
+        ); // bps,分母区间设置为3000
+
+        $scope.totalBandwidth = Math.round(
           (8 * TotalDataInAnInterval) / (TotalTimeInAnInterval / 1000)
-        ); // bps
+        ); // bps,分母区间设置为有效传输时间
+
         $scope.totalDownloadTime = downloadTimeAll / downloadRequestCount;
       }
     }

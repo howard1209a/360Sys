@@ -44,7 +44,8 @@ function VaserRuleClass() {
 
     var in_fov = false;
     for (face in visible_faces) {
-      if (face.includes(info.face)) {
+      var faceIndex = parseInt(face.split("_")[2]);
+      if (faceIndex == info.face) {
         in_fov = true;
         break;
       }
