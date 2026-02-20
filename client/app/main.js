@@ -30,6 +30,9 @@ app.controller("DashController", [
     $scope.playerBufferLength = []; // 全部播放器实时缓冲区长度
     $scope.playerAverageThroughput = []; // 全部播放器实时网络吞吐量
 
+    $scope.low_quality_ratio = 0; // 视野内低质量区域比例，每秒更新一次
+    $scope.bitrate_in_view = 0; // 视野内比特率，每秒更新一次
+
     $scope.requestList = []; // 由dash内部注入，保存了全部播放器的http请求，按照请求结束下载时间从小到大排序
 
     $scope.selectedItem = {};
@@ -788,6 +791,26 @@ app.controller("DashController", [
         percentageVisibleFaces.length - 1
       );
       percentageVisibleFaces += "]";
+
+      var x = $scope.players[0].getBitrateInfoListFor("video");
+
+      // 计算视野内低质量区域比例
+      var all_region = 0;
+      var low_quality_region = 0;
+      var bitrate_in_view = 0;
+      for (face in current_visible_faces) {
+        var faceIndex = parseInt(face.split("_")[2]);
+        all_region += current_visible_faces[face];
+        var tile_quality = $scope.players[faceIndex].getQualityFor("video");
+        if (tile_quality == 0) {
+          low_quality_region += current_visible_faces[face];
+        }
+        bitrate_in_view +=
+          $scope.players[faceIndex].getBitrateInfoListFor("video")[tile_quality]
+            .bitrate * current_visible_faces[face];
+      }
+      $scope.low_quality_ratio = low_quality_region / all_region;
+      $scope.bitrate_in_view = bitrate_in_view;
 
       let frame_data = {
         // 时间戳

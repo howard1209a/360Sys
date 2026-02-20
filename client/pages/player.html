@@ -359,6 +359,28 @@
                 </label>
                 {{totalDownloadTime.toFixed(2)}} s
               </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >视野内低质量区域比例 :
+                </label>
+                {{low_quality_ratio.toFixed(2)}}
+              </div>
+
+              <div class="text-success">
+                <label
+                  class="text-primary"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  >视野内画面比特率 :
+                </label>
+                {{bitrate_in_view >= 8000000 ? (bitrate_in_view /
+                8000000).toFixed(2) : (bitrate_in_view / 8000).toFixed(0)}}
+                {{bitrate_in_view >= 8000000 ? " MB/s" : " KB/s"}}
+              </div>
             </div>
           </div>
         </div>
