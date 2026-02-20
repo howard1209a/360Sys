@@ -4,6 +4,7 @@ from matplotlib import rcParams
 
 plt.rcParams["font.family"] = ["Times New Roman", "SimSun"]
 
+
 def format_draw_histogram(
         labels,
         data,
@@ -44,17 +45,17 @@ def format_draw_histogram(
 
 if __name__ == "__main__":
     labels = ['SPB-360', 'Vaser', 'VAAC', 'VAAC-E', 'PW']
-    data = [0.17, 0, 0.184, 0.121, 0.178]
+    data = [4204, 5111, 4173, 4501, 1427]
     colors = ['#B24475', '#864CBC', '#386688', '#845D1C', '#8A543C']
     hatch_patterns = ['x', 'o', '/', '+', '\\']
 
     format_draw_histogram(
         labels=labels,
         data=data,
-        y_label_name='low quality ratio',
+        y_label_name='average quality(kbps)',
         x_label_name='',
-        ylim=(0, 0.25),
-        save_path='./low_quality_ratio.png',
+        ylim=(0, 6000),
+        save_path='./average_quality.png',
         colors=colors,
         hatch_patterns=hatch_patterns,
     )
